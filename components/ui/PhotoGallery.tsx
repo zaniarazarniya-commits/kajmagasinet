@@ -21,6 +21,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
   const [activeTile, setActiveTile] = useState<GalleryTile | null>(null);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
+  const [isDraggingSlider, setIsDraggingSlider] = useState(false);
 
   const scrollByCards = (direction: "left" | "right") => {
     const container = scrollRef.current;
@@ -50,10 +51,10 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
     };
   }, [tiles.length]);
 
-  const handleBarChange = (value: number) => {
+  const handleBarChange = (value: number, smooth = true) => {
     const container = scrollRef.current;
     if (!container) return;
-    container.scrollTo({ left: value, behavior: "smooth" });
+    container.scrollTo({ left: value, behavior: smooth ? "smooth" : "auto" });
   };
 
   const setScrollFromPointer = (clientX: number) => {
@@ -62,10 +63,11 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
     const bounds = track.getBoundingClientRect();
     const ratio = (clientX - bounds.left) / bounds.width;
     const clampedRatio = Math.min(1, Math.max(0, ratio));
-    handleBarChange(clampedRatio * maxScroll);
+    handleBarChange(clampedRatio * maxScroll, false);
   };
 
   const startDragging = (clientX: number) => {
+    setIsDraggingSlider(true);
     setScrollFromPointer(clientX);
 
     const onMove = (event: PointerEvent) => {
@@ -73,6 +75,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
     };
 
     const onUp = () => {
+      setIsDraggingSlider(false);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
     };
@@ -167,22 +170,38 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
               const step = maxScroll / 12 || 40;
               if (e.key === "ArrowLeft") {
                 e.preventDefault();
-                handleBarChange(Math.max(0, scrollLeft - step));
+                handleBarChange(Math.max(0, scrollLeft - step), true);
               }
               if (e.key === "ArrowRight") {
                 e.preventDefault();
-                handleBarChange(Math.min(maxScroll, scrollLeft + step));
+                handleBarChange(Math.min(maxScroll, scrollLeft + step), true);
               }
             }}
-            className="relative h-3 cursor-ew-resize rounded-full border border-[var(--rope)]/35 bg-[linear-gradient(90deg,#b78f43,#d6b978,#b78f43)] shadow-[inset_0_1px_2px_rgba(10,20,40,0.25)]"
+            className="relative h-3 cursor-ew-resize rounded-full border border-[var(--rope)]/30 bg-[linear-gradient(90deg,#b78f43,#d6b978,#b78f43)] shadow-[inset_0_1px_1px_rgba(6,12,24,0.22),0_2px_6px_rgba(6,12,24,0.12)]"
           >
+            <span
+              className="pointer-events-none absolute -left-7 top-1/2 h-3 w-5 -translate-y-1/2 rounded-full border-t-2 border-[var(--brass)]/90 opacity-80"
+              aria-hidden="true"
+            />
+            <span
+              className="pointer-events-none absolute -left-10 top-1/2 h-2 w-3 -translate-y-[35%] rotate-[18deg] rounded-full border-t border-[var(--brass)]/80 opacity-75"
+              aria-hidden="true"
+            />
+            <span
+              className="pointer-events-none absolute -right-7 top-1/2 h-3 w-5 -translate-y-1/2 rounded-full border-t-2 border-[var(--brass)]/90 opacity-80"
+              aria-hidden="true"
+            />
+            <span
+              className="pointer-events-none absolute -right-10 top-1/2 h-2 w-3 -translate-y-[35%] -rotate-[18deg] rounded-full border-t border-[var(--brass)]/80 opacity-75"
+              aria-hidden="true"
+            />
             <div
               className="absolute inset-y-0 left-0 rounded-full bg-[linear-gradient(90deg,var(--brass),#d3b57a)]"
               style={{ width: `${(scrollLeft / maxScroll) * 100}%` }}
               aria-hidden="true"
             />
             <div
-              className="absolute top-1/2 z-10 flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--ocean-deep)] bg-[var(--brass)] shadow-[0_2px_8px_rgba(5,11,22,0.35)]"
+              className={`absolute top-1/2 z-10 flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--ocean-deep)] bg-[var(--brass)] shadow-[0_2px_8px_rgba(5,11,22,0.35)] transition-transform duration-150 ${isDraggingSlider ? "scale-110" : "scale-100"}`}
               style={{ left: `${(scrollLeft / maxScroll) * 100}%` }}
               aria-hidden="true"
             >
