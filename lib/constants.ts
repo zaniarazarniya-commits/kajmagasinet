@@ -1,11 +1,15 @@
 export const SITE = {
   name: "Kajmagasinet",
   tagline: "Restaurang och bar",
-  address: "Kungsgatan 1, 453 30 Lysekil",
-  phone: "+46 10-000 00 00",
-  email: "info@kajmagasinet.se",
+  address: "Rosviksgatan 1, 453 30 Lysekil",
+  /** Visningsformat; använd `phoneTel` i tel:-länkar (E.164). */
+  phone: "076-716 04 24",
+  phoneTel: "+46767160424",
+  email: "kajmagasinet@gmail.com",
   instagram: "https://www.instagram.com/kajmagasinet",
-  mapsUrl: "https://maps.google.com/?q=Kungsgatan+1+Lysekil",
+  /** Pin mot rätt läge (samma som Google Maps ”Kajmagasinet” vid Rosviksgatan). */
+  mapsUrl:
+    "https://www.google.com/maps/place/Kajmagasinet/@58.2730708,11.4363266,18z",
   bookingUrl: "#boka",
 } as const;
 

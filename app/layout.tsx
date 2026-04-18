@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-import { StartupTelemetry } from "@/components/debug/StartupTelemetry";
 import "./globals.css";
 
 const inter = Inter({
@@ -37,7 +36,6 @@ export default function RootLayout({
   return (
     <html lang="sv" className={`${inter.variable} ${playfair.variable} h-full`}>
       <body className="min-h-full flex flex-col antialiased">
-        <StartupTelemetry />
         {children}
       </body>
     </html>

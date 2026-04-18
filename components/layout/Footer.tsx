@@ -48,13 +48,13 @@ export function Footer() {
               <p className="font-serif text-xl font-normal text-[var(--canvas)]">{SITE.name}</p>
             </div>
             <p className="font-sans text-sm text-[var(--canvas)]/50 leading-relaxed mb-6">
-              Restaurang och bar vid Kungsgatan — öppet sedan 2010.
+              Restaurang och bar vid Rosviksgatan — öppet sedan 2010.
             </p>
             <div className="flex gap-2">
               {[
                 { href: SITE.instagram, icon: Share2, label: "Instagram" },
                 { href: `mailto:${SITE.email}`, icon: Mail, label: "E-post" },
-                { href: `tel:${SITE.phone.replace(/\s/g, "")}`, icon: Phone, label: "Telefon" },
+                { href: `tel:${SITE.phoneTel}`, icon: Phone, label: "Telefon" },
               ].map(({ href, icon: Icon, label }) => (
                 <a
                   key={label}

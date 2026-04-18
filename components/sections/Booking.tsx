@@ -55,7 +55,7 @@ export function Booking() {
             variants={fadeUp}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Button href={`tel:${SITE.phone.replace(/\s/g, "")}`} size="lg">
+            <Button href={`tel:${SITE.phoneTel}`} size="lg">
               <Phone size={16} aria-hidden="true" />
               Ring oss
             </Button>

@@ -42,8 +42,8 @@ describe("FindUs", () => {
     expect(screen.getByText(SITE.phone)).toBeInTheDocument();
   });
 
-  it("has a directions link", () => {
+  it("has a maps link", () => {
     render(<FindUs />);
-    expect(screen.getByText(/vägbeskrivning/i)).toBeInTheDocument();
+    expect(screen.getByText("Öppna i Google Maps")).toBeInTheDocument();
   });
 });

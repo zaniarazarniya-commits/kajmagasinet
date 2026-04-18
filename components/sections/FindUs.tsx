@@ -95,7 +95,7 @@ export function FindUs() {
               </a>
 
               <a
-                href={`tel:${SITE.phone.replace(/\s/g, "")}`}
+                href={`tel:${SITE.phoneTel}`}
                 className="group flex items-start gap-5 hover:opacity-80 transition-opacity"
               >
                 <span className="mt-0.5 w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-full border border-[var(--canvas)]/15">

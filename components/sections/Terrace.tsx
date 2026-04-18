@@ -99,7 +99,7 @@ export function Terrace() {
             viewport={VIEWPORT_CONFIG}
             className="mt-10 font-sans text-sm text-[var(--ink-mid)]/65 leading-relaxed"
           >
-            Sedan 2010 på Kungsgatan — biljard och dart inne, servering utomhus maj–september.
+            Sedan 2010 på Rosviksgatan — biljard och dart inne, servering utomhus maj–september.
           </motion.p>
         </motion.div>
       </div>
