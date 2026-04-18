@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Anchor, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { fadeUp, staggerContainer, VIEWPORT_CONFIG } from "@/lib/animations";
 import type { GalleryTile } from "@/lib/constants";
 
@@ -13,10 +13,11 @@ type PhotoGalleryProps = {
 };
 
 const CARD_BASE =
-  "group relative w-[44vw] min-w-[150px] max-w-[190px] lg:w-auto lg:min-w-0 aspect-square overflow-hidden rounded-sm border border-[var(--rope)]/20 bg-[var(--ocean-deep)] snap-start cursor-zoom-in shrink-0";
+  "group relative w-[44vw] min-w-[150px] max-w-[190px] md:w-[190px] md:min-w-[190px] lg:w-[210px] lg:min-w-[210px] aspect-square overflow-hidden rounded-sm border border-[var(--rope)]/20 bg-[var(--ocean-deep)] snap-start cursor-zoom-in shrink-0";
 
 export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [activeTile, setActiveTile] = useState<GalleryTile | null>(null);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
@@ -52,7 +53,32 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
   const handleBarChange = (value: number) => {
     const container = scrollRef.current;
     if (!container) return;
-    container.scrollTo({ left: value, behavior: "auto" });
+    container.scrollTo({ left: value, behavior: "smooth" });
+  };
+
+  const setScrollFromPointer = (clientX: number) => {
+    const track = trackRef.current;
+    if (!track || maxScroll <= 0) return;
+    const bounds = track.getBoundingClientRect();
+    const ratio = (clientX - bounds.left) / bounds.width;
+    const clampedRatio = Math.min(1, Math.max(0, ratio));
+    handleBarChange(clampedRatio * maxScroll);
+  };
+
+  const startDragging = (clientX: number) => {
+    setScrollFromPointer(clientX);
+
+    const onMove = (event: PointerEvent) => {
+      setScrollFromPointer(event.clientX);
+    };
+
+    const onUp = () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp, { once: true });
   };
 
   return (
@@ -127,23 +153,41 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
       </div>
 
       {maxScroll > 0 && (
-        <div className="mt-4 mx-auto w-full max-w-md">
-          <div className="relative h-2 rounded-full bg-[linear-gradient(90deg,rgba(7,13,24,0.9),rgba(7,13,24,0.65))] border border-[var(--rope)]/25">
+        <div className="mt-4 mx-auto w-full max-w-xl px-1">
+          <div
+            ref={trackRef}
+            role="slider"
+            aria-label="Bläddra i fotogalleriet"
+            aria-valuemin={0}
+            aria-valuemax={Math.round(maxScroll)}
+            aria-valuenow={Math.round(Math.min(scrollLeft, maxScroll))}
+            tabIndex={0}
+            onPointerDown={(e) => startDragging(e.clientX)}
+            onKeyDown={(e) => {
+              const step = maxScroll / 12 || 40;
+              if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                handleBarChange(Math.max(0, scrollLeft - step));
+              }
+              if (e.key === "ArrowRight") {
+                e.preventDefault();
+                handleBarChange(Math.min(maxScroll, scrollLeft + step));
+              }
+            }}
+            className="relative h-3 cursor-ew-resize rounded-full border border-[var(--rope)]/35 bg-[linear-gradient(90deg,#b78f43,#d6b978,#b78f43)] shadow-[inset_0_1px_2px_rgba(10,20,40,0.25)]"
+          >
             <div
               className="absolute inset-y-0 left-0 rounded-full bg-[linear-gradient(90deg,var(--brass),#d3b57a)]"
               style={{ width: `${(scrollLeft / maxScroll) * 100}%` }}
               aria-hidden="true"
             />
-            <input
-              type="range"
-              min={0}
-              max={maxScroll}
-              step={1}
-              value={Math.min(scrollLeft, maxScroll)}
-              onChange={(e) => handleBarChange(Number(e.target.value))}
-              aria-label="Bläddra i fotogalleriet"
-              className="absolute inset-0 h-full w-full cursor-ew-resize appearance-none bg-transparent [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-[var(--rope)]/40 [&::-webkit-slider-thumb]:bg-[var(--brass)] [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border [&::-moz-range-thumb]:border-[var(--rope)]/40 [&::-moz-range-thumb]:bg-[var(--brass)] [&::-moz-range-track]:bg-transparent"
-            />
+            <div
+              className="absolute top-1/2 z-10 flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--ocean-deep)] bg-[var(--brass)] shadow-[0_2px_8px_rgba(5,11,22,0.35)]"
+              style={{ left: `${(scrollLeft / maxScroll) * 100}%` }}
+              aria-hidden="true"
+            >
+              <Anchor size={14} strokeWidth={1.8} className="text-[var(--ocean-deep)]" />
+            </div>
           </div>
         </div>
       )}
