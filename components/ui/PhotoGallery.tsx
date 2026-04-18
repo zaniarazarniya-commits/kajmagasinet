@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { Anchor, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { fadeUp, staggerContainer, VIEWPORT_CONFIG } from "@/lib/animations";
 import type { GalleryTile } from "@/lib/constants";
 
@@ -17,11 +17,9 @@ const CARD_BASE =
 
 export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
   const [activeTile, setActiveTile] = useState<GalleryTile | null>(null);
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [maxScroll, setMaxScroll] = useState(0);
-  const [isDraggingSlider, setIsDraggingSlider] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const [canScroll, setCanScroll] = useState(false);
 
   const scrollByCards = (direction: "left" | "right") => {
     const container = scrollRef.current;
@@ -37,9 +35,13 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
     if (!container) return;
 
     const updateMetrics = () => {
-      const nextMax = Math.max(0, container.scrollWidth - container.clientWidth);
-      setMaxScroll(nextMax);
-      setScrollLeft(Math.min(container.scrollLeft, nextMax));
+      const firstCard = container.querySelector<HTMLElement>("[data-gallery-card='true']");
+      const cardWidth = firstCard?.offsetWidth ?? 1;
+      const gap = 16;
+      const step = cardWidth + gap;
+      const nextIndex = Math.round(container.scrollLeft / step) + 1;
+      setCurrentIndex(Math.max(1, Math.min(tiles.length, nextIndex)));
+      setCanScroll(container.scrollWidth > container.clientWidth + 1);
     };
 
     updateMetrics();
@@ -51,39 +53,6 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
     };
   }, [tiles.length]);
 
-  const handleBarChange = (value: number, smooth = true) => {
-    const container = scrollRef.current;
-    if (!container) return;
-    container.scrollTo({ left: value, behavior: smooth ? "smooth" : "auto" });
-  };
-
-  const setScrollFromPointer = (clientX: number) => {
-    const track = trackRef.current;
-    if (!track || maxScroll <= 0) return;
-    const bounds = track.getBoundingClientRect();
-    const ratio = (clientX - bounds.left) / bounds.width;
-    const clampedRatio = Math.min(1, Math.max(0, ratio));
-    handleBarChange(clampedRatio * maxScroll, false);
-  };
-
-  const startDragging = (clientX: number) => {
-    setIsDraggingSlider(true);
-    setScrollFromPointer(clientX);
-
-    const onMove = (event: PointerEvent) => {
-      setScrollFromPointer(event.clientX);
-    };
-
-    const onUp = () => {
-      setIsDraggingSlider(false);
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", onUp);
-    };
-
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp, { once: true });
-  };
-
   return (
     <>
       <div className={`relative ${className}`}>
@@ -91,7 +60,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
           type="button"
           aria-label="Scrolla bilder åt vänster"
           onClick={() => scrollByCards("left")}
-          className="hidden md:flex absolute -left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-full border border-[var(--rope)]/25 bg-[var(--canvas)]/90 text-[var(--ink)] shadow-sm hover:bg-[var(--canvas)]"
+          className="flex absolute -left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-full border border-[var(--rope)]/25 bg-[var(--canvas)]/90 text-[var(--ink)] shadow-sm hover:bg-[var(--canvas)]"
         >
           <ChevronLeft size={18} />
         </button>
@@ -149,65 +118,17 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
           type="button"
           aria-label="Scrolla bilder åt höger"
           onClick={() => scrollByCards("right")}
-          className="hidden md:flex absolute -right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-full border border-[var(--rope)]/25 bg-[var(--canvas)]/90 text-[var(--ink)] shadow-sm hover:bg-[var(--canvas)]"
+          className="flex absolute -right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-full border border-[var(--rope)]/25 bg-[var(--canvas)]/90 text-[var(--ink)] shadow-sm hover:bg-[var(--canvas)]"
         >
           <ChevronRight size={18} />
         </button>
       </div>
 
-      {maxScroll > 0 && (
-        <div className="mt-4 mx-auto w-full max-w-xl px-1">
-          <div
-            ref={trackRef}
-            role="slider"
-            aria-label="Bläddra i fotogalleriet"
-            aria-valuemin={0}
-            aria-valuemax={Math.round(maxScroll)}
-            aria-valuenow={Math.round(Math.min(scrollLeft, maxScroll))}
-            tabIndex={0}
-            onPointerDown={(e) => startDragging(e.clientX)}
-            onKeyDown={(e) => {
-              const step = maxScroll / 12 || 40;
-              if (e.key === "ArrowLeft") {
-                e.preventDefault();
-                handleBarChange(Math.max(0, scrollLeft - step), true);
-              }
-              if (e.key === "ArrowRight") {
-                e.preventDefault();
-                handleBarChange(Math.min(maxScroll, scrollLeft + step), true);
-              }
-            }}
-            className="relative h-3 cursor-ew-resize rounded-full border border-[var(--rope)]/30 bg-[linear-gradient(90deg,#b78f43,#d6b978,#b78f43)] shadow-[inset_0_1px_1px_rgba(6,12,24,0.22),0_2px_6px_rgba(6,12,24,0.12)]"
-          >
-            <span
-              className="pointer-events-none absolute -left-7 top-1/2 h-3 w-5 -translate-y-1/2 rounded-full border-t-2 border-[var(--brass)]/90 opacity-80"
-              aria-hidden="true"
-            />
-            <span
-              className="pointer-events-none absolute -left-10 top-1/2 h-2 w-3 -translate-y-[35%] rotate-[18deg] rounded-full border-t border-[var(--brass)]/80 opacity-75"
-              aria-hidden="true"
-            />
-            <span
-              className="pointer-events-none absolute -right-7 top-1/2 h-3 w-5 -translate-y-1/2 rounded-full border-t-2 border-[var(--brass)]/90 opacity-80"
-              aria-hidden="true"
-            />
-            <span
-              className="pointer-events-none absolute -right-10 top-1/2 h-2 w-3 -translate-y-[35%] -rotate-[18deg] rounded-full border-t border-[var(--brass)]/80 opacity-75"
-              aria-hidden="true"
-            />
-            <div
-              className="absolute inset-y-0 left-0 rounded-full bg-[linear-gradient(90deg,var(--brass),#d3b57a)]"
-              style={{ width: `${(scrollLeft / maxScroll) * 100}%` }}
-              aria-hidden="true"
-            />
-            <div
-              className={`absolute top-1/2 z-10 flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--ocean-deep)] bg-[var(--brass)] shadow-[0_2px_8px_rgba(5,11,22,0.35)] transition-transform duration-150 ${isDraggingSlider ? "scale-110" : "scale-100"}`}
-              style={{ left: `${(scrollLeft / maxScroll) * 100}%` }}
-              aria-hidden="true"
-            >
-              <Anchor size={14} strokeWidth={1.8} className="text-[var(--ocean-deep)]" />
-            </div>
-          </div>
+      {canScroll && (
+        <div className="mt-3 flex justify-center">
+          <p className="font-sans text-xs tracking-[0.22em] uppercase text-[var(--ink-mid)]/70">
+            {currentIndex}/{tiles.length}
+          </p>
         </div>
       )}
 
