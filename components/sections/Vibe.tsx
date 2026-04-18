@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { AFTER_MEAL } from "@/lib/constants";
+import { PhotoGallery } from "@/components/ui/PhotoGallery";
+import { AFTER_MEAL, VIBE_GALLERY_TILES } from "@/lib/constants";
 import { fadeUp, VIEWPORT_CONFIG } from "@/lib/animations";
 
 export function Vibe() {
@@ -31,6 +32,10 @@ export function Vibe() {
         >
           {AFTER_MEAL.body}
         </motion.p>
+      </div>
+
+      <div className="max-w-6xl mx-auto mt-10 md:mt-14">
+        <PhotoGallery tiles={VIBE_GALLERY_TILES} />
       </div>
     </section>
   );
