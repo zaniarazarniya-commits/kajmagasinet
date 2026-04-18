@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1424"/>
+      <stop offset="45%" style="stop-color:#122338"/>
+      <stop offset="100%" style="stop-color:#1a1816"/>
+    </linearGradient>
+    <radialGradient id="lantern" cx="50%" cy="35%" r="55%">
+      <stop offset="0%" style="stop-color:#c9a24a;stop-opacity:0.35"/>
+      <stop offset="50%" style="stop-color:#8b6914;stop-opacity:0.12"/>
+      <stop offset="100%" style="stop-color:#0a1424;stop-opacity:0"/>
+    </radialGradient>
+    <radialGradient id="water" cx="50%" cy="100%" r="70%">
+      <stop offset="0%" style="stop-color:#1e3a52;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#0a1424;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#sky)"/>
+  <rect width="100%" height="100%" fill="url(#lantern)"/>
+  <rect width="100%" height="100%" fill="url(#water)"/>
+  <path fill="#1a2d3d" fill-opacity="0.25" d="M0 720 Q480 680 960 720 T1920 700 V1080 H0 Z"/>
+  <path fill="#0f1c2a" fill-opacity="0.35" d="M0 760 Q640 720 1280 760 T1920 740 V1080 H0 Z"/>
+</svg>

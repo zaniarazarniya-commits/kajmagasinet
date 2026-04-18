@@ -1,0 +1,138 @@
+@import "tailwindcss";
+
+:root {
+  /* ── Havet: djupa, rena blå toner ───────────────────────────────── */
+  --ocean-abyss: #070d18;
+  --ocean-deep: #0e1a2e;
+  --ocean-mid: #1a2d48;
+  --ocean-soft: #2a4668;
+  --sea-blue: #5b7ea3;
+  --sea-mist: #a9bccf;
+
+  /* ── Papper / vitt / ljusa ytor ──────────────────────────────────── */
+  --canvas: #fafaf7;
+  --parchment: #f1efe9;
+  --stone: #d9d6ce;
+
+  /* ── Mässing som sparsam accent (inte dominant) ─────────────────── */
+  --brass: #b89560;
+  --brass-light: #d4b883;
+
+  /* ── Text ───────────────────────────────────────────────────────── */
+  --ink-dark: #0e1a2e;
+  --ink-mid: #4a5a72;
+  --ink-soft: #8895a8;
+  --ink-light: #fafaf7;
+  --muted-light: rgba(250, 250, 247, 0.72);
+
+  /* ── Legacy-alias (så övriga komponenter inte går sönder) ───────── */
+  --rope: #b89560;
+  --wood-dark: #0e1a2e;
+  --wood-mid: #1a2d48;
+  --wood-light: #2a4668;
+  --kelp: #1a2d48;
+  --sea-green: #2a4668;
+  --sea-foam: #a9bccf;
+  --patina: #5b7ea3;
+  --rust: #b89560;
+  --copper: #b89560;
+  --brass-glow: rgba(212, 184, 131, 0.25);
+}
+
+@theme inline {
+  --color-ocean-abyss: #070d18;
+  --color-ocean-deep: #0e1a2e;
+  --color-ocean-mid: #1a2d48;
+  --color-ocean-soft: #2a4668;
+  --color-sea-blue: #5b7ea3;
+  --color-sea-mist: #a9bccf;
+  --color-canvas: #fafaf7;
+  --color-parchment: #f1efe9;
+  --color-stone: #d9d6ce;
+  --color-brass: #b89560;
+  --color-ink-dark: #0e1a2e;
+  --color-ink-mid: #4a5a72;
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--canvas);
+  color: var(--ink-dark);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-playfair), Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background-color: var(--ocean-deep);
+  color: var(--canvas);
+}
+
+/* ── Tunn horisontell linje (ersätter rope-divider) ─────────────── */
+.rope-divider {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--brass) 20%,
+    var(--brass) 80%,
+    transparent 100%
+  );
+  height: 1px;
+  border-radius: 0;
+  opacity: 0.45;
+}
+
+/* ── Mörk marin panel (navbar / footer) ─────────────────────────── */
+.wood-bg,
+.nautical-panel-dark {
+  background: var(--ocean-deep);
+}
+
+/* ── Canvas (ren off-white, ingen brus) ─────────────────────────── */
+.canvas-bg {
+  background-color: var(--canvas);
+}
+
+/* ── Subtil ramlinje (ersätter brass-frame) ─────────────────────── */
+.brass-frame {
+  position: relative;
+  border-radius: 2px;
+  box-shadow:
+    0 0 0 1px rgba(14, 26, 46, 0.08),
+    0 4px 18px rgba(14, 26, 46, 0.05);
+}
+
+.brass-frame::before {
+  content: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--parchment);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ocean-soft);
+  border-radius: 999px;
+}
+
+/* ── Elegant hairline under rubriker ────────────────────────────── */
+.hairline {
+  display: inline-block;
+  width: 2.5rem;
+  height: 1px;
+  background: var(--brass);
+  opacity: 0.6;
+}

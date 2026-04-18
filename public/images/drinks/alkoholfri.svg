@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg-af" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a2d48"/>
+      <stop offset="1" stop-color="#070d18"/>
+    </linearGradient>
+    <linearGradient id="liq-af" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e89fb2" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#a34060" stop-opacity="0.85"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#bg-af)"/>
+  <g opacity="0.9">
+    <path d="M150 150 L250 150 L245 340 Q245 358 225 362 L175 362 Q155 358 155 340 Z" fill="url(#liq-af)" opacity="0.85"/>
+    <path d="M148 148 L252 148 L250 342 Q250 362 227 367 L173 367 Q150 362 150 342 Z" fill="none" stroke="#fafaf7" stroke-width="1.4" opacity="0.85"/>
+    <circle cx="185" cy="220" r="5" fill="#5a1830" opacity="0.85"/>
+    <circle cx="215" cy="260" r="4" fill="#5a1830" opacity="0.8"/>
+    <circle cx="195" cy="300" r="4.5" fill="#5a1830" opacity="0.85"/>
+    <path d="M205 180 Q215 160 225 175 Q220 185 210 188 Z" fill="#2a4668" opacity="0.7"/>
+    <path d="M150 150 L250 150 L249 162 L151 162 Z" fill="#fafaf7" opacity="0.22"/>
+  </g>
+  <text x="200" y="440" text-anchor="middle" fill="#b89560" font-family="Georgia, serif" font-size="14" letter-spacing="4" opacity="0.7">ALKOHOLFRI</text>
+</svg>

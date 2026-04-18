@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg-gt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a2d48"/>
+      <stop offset="1" stop-color="#070d18"/>
+    </linearGradient>
+    <linearGradient id="liq-gt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c8e6f0" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#5b7ea3" stop-opacity="0.6"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#bg-gt)"/>
+  <g opacity="0.8">
+    <path d="M150 140 L250 140 L245 330 Q245 350 225 355 L175 355 Q155 350 155 330 Z" fill="url(#liq-gt)" opacity="0.55"/>
+    <path d="M150 140 L250 140 L248 160 L152 160 Z" fill="#fafaf7" opacity="0.15"/>
+    <rect x="154" y="140" width="3" height="210" fill="#fafaf7" opacity="0.35"/>
+    <path d="M148 138 L252 138 L251 358 Q250 378 228 383 L172 383 Q150 378 149 358 Z" fill="none" stroke="#fafaf7" stroke-width="1.4" opacity="0.85"/>
+    <circle cx="180" cy="200" r="4" fill="#fafaf7" opacity="0.6"/>
+    <circle cx="215" cy="240" r="3" fill="#fafaf7" opacity="0.5"/>
+    <circle cx="195" cy="280" r="3.5" fill="#fafaf7" opacity="0.55"/>
+    <path d="M220 170 Q235 180 225 200" stroke="#b89560" stroke-width="1.5" fill="none" opacity="0.8"/>
+  </g>
+  <text x="200" y="440" text-anchor="middle" fill="#b89560" font-family="Georgia, serif" font-size="16" letter-spacing="4" opacity="0.7">GIN &amp; TONIC</text>
+</svg>
