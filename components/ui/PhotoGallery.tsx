@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
@@ -18,6 +18,8 @@ const CARD_BASE =
 export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeTile, setActiveTile] = useState<GalleryTile | null>(null);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [maxScroll, setMaxScroll] = useState(0);
 
   const scrollByCards = (direction: "left" | "right") => {
     const container = scrollRef.current;
@@ -26,6 +28,31 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
     const amount = card ? card.offsetWidth + 16 : 220;
     const distance = direction === "left" ? -amount * 2 : amount * 2;
     container.scrollBy({ left: distance, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const updateMetrics = () => {
+      const nextMax = Math.max(0, container.scrollWidth - container.clientWidth);
+      setMaxScroll(nextMax);
+      setScrollLeft(Math.min(container.scrollLeft, nextMax));
+    };
+
+    updateMetrics();
+    container.addEventListener("scroll", updateMetrics, { passive: true });
+    window.addEventListener("resize", updateMetrics);
+    return () => {
+      container.removeEventListener("scroll", updateMetrics);
+      window.removeEventListener("resize", updateMetrics);
+    };
+  }, [tiles.length]);
+
+  const handleBarChange = (value: number) => {
+    const container = scrollRef.current;
+    if (!container) return;
+    container.scrollTo({ left: value, behavior: "auto" });
   };
 
   return (
@@ -46,7 +73,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT_CONFIG}
-          className="flex lg:grid lg:grid-cols-5 gap-3 md:gap-4 overflow-x-auto lg:overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="flex gap-3 md:gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
           {tiles.map((tile, i) => (
             <motion.div
@@ -98,6 +125,28 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
           <ChevronRight size={18} />
         </button>
       </div>
+
+      {maxScroll > 0 && (
+        <div className="mt-4 mx-auto w-full max-w-md">
+          <div className="relative h-2 rounded-full bg-[linear-gradient(90deg,rgba(7,13,24,0.9),rgba(7,13,24,0.65))] border border-[var(--rope)]/25">
+            <div
+              className="absolute inset-y-0 left-0 rounded-full bg-[linear-gradient(90deg,var(--brass),#d3b57a)]"
+              style={{ width: `${(scrollLeft / maxScroll) * 100}%` }}
+              aria-hidden="true"
+            />
+            <input
+              type="range"
+              min={0}
+              max={maxScroll}
+              step={1}
+              value={Math.min(scrollLeft, maxScroll)}
+              onChange={(e) => handleBarChange(Number(e.target.value))}
+              aria-label="Bläddra i fotogalleriet"
+              className="absolute inset-0 h-full w-full cursor-ew-resize appearance-none bg-transparent [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-[var(--rope)]/40 [&::-webkit-slider-thumb]:bg-[var(--brass)] [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border [&::-moz-range-thumb]:border-[var(--rope)]/40 [&::-moz-range-thumb]:bg-[var(--brass)] [&::-moz-range-track]:bg-transparent"
+            />
+          </div>
+        </div>
+      )}
 
       <AnimatePresence>
         {activeTile && (
