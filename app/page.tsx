@@ -9,12 +9,14 @@ import { Vibe } from "@/components/sections/Vibe";
 import { FindUs } from "@/components/sections/FindUs";
 import { Booking } from "@/components/sections/Booking";
 import { client } from "@/sanity/lib/client";
+import { draftClient } from "@/sanity/lib/draftClient";
 import { urlFor } from "@/sanity/lib/image";
 import { homePageQuery } from "@/sanity/lib/queries";
 
 export default async function Home() {
   const { isEnabled } = await draftMode();
-  const data = await client.fetch(
+  const activeClient = isEnabled ? draftClient : client;
+  const data = await activeClient.fetch(
     homePageQuery,
     {},
     { perspective: isEnabled ? "previewDrafts" : "published" },

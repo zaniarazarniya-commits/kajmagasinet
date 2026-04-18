@@ -4,11 +4,16 @@ import { createClient } from 'next-sanity'
 
 import { apiVersion, dataset, projectId } from '../env'
 
+const token =
+  process.env.SANITY_API_READ_TOKEN ||
+  process.env.SANITY_VIEWER_TOKEN ||
+  ''
+
 /** Endast server: token krävs för preview-/draft-läge (t.ex. draft-mode enable). */
 export const draftClient = createClient({
   projectId,
   dataset,
   apiVersion,
   useCdn: false,
-  token: process.env.SANITY_API_READ_TOKEN,
+  token,
 })
