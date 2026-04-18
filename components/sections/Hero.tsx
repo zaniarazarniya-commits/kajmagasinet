@@ -1,12 +1,30 @@
 "use client";
 
+import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { stegaClean } from "next-sanity";
 import { Anchor, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { staggerContainer, fadeUp } from "@/lib/animations";
 
-export function Hero() {
+const DEFAULT_HEADLINE = "Kajmagasinet";
+
+type HeroProps = {
+  headline?: string | null;
+  heroImageUrl?: string | null;
+  heroImageAlt?: string | null;
+};
+
+export function Hero({
+  headline,
+  heroImageUrl,
+  heroImageAlt,
+}: HeroProps) {
+  const title =
+    headline != null && stegaClean(headline).trim() !== ""
+      ? headline
+      : DEFAULT_HEADLINE;
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -24,6 +42,16 @@ export function Hero() {
     >
       {/* Enkel djupblå bakgrund med mjuk gradient */}
       <motion.div style={{ y }} className="absolute inset-0 z-0">
+        {heroImageUrl ? (
+          <Image
+            src={heroImageUrl}
+            alt={heroImageAlt?.trim() || "Förstasidans hjältebild"}
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+        ) : null}
         <div
           className="absolute inset-0"
           style={{
@@ -74,7 +102,7 @@ export function Hero() {
             className="font-serif font-normal text-[var(--canvas)] leading-[0.98] mb-6"
             style={{ fontSize: "clamp(3rem, 8vw, 5.75rem)" }}
           >
-            Kajmagasinet
+            {title}
           </motion.h1>
 
           <motion.p
