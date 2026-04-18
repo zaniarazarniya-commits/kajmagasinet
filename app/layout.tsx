@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
-import { VisualEditing } from "next-sanity/visual-editing";
 import { Inter, Playfair_Display } from "next/font/google";
+import { VisualEditingFrameGate } from "@/components/sanity/VisualEditingFrameGate";
 import "./globals.css";
 
 const inter = Inter({
@@ -41,7 +41,7 @@ export default async function RootLayout({
     <html lang="sv" className={`${inter.variable} ${playfair.variable} h-full`}>
       <body className="min-h-full flex flex-col antialiased">
         {children}
-        {isEnabled && <VisualEditing />}
+        {isEnabled && <VisualEditingFrameGate />}
       </body>
     </html>
   );
