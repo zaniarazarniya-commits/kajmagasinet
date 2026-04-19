@@ -125,11 +125,11 @@ export function Hero({
             >
               Boka bord
             </Button>
-            <Button href="/meny" size="lg">
-              Se menyn
-            </Button>
-            <Button href="/kontakt" size="lg" variant="outline">
+            <Button href="/kontakt" size="lg">
               Kontakt & hitta hit
+            </Button>
+            <Button href="/meny" size="lg" variant="outline">
+              Se menyn
             </Button>
           </motion.div>
         </motion.div>
