@@ -6,10 +6,17 @@ export const structure: StructureResolver = (S) =>
     .title('Innehåll')
     .items([
       S.listItem()
+        .title('Webbplats')
+        .id('siteSettings')
+        .child(
+          S.document().schemaType('siteSettings').documentId('siteSettings'),
+        ),
+      S.listItem()
         .title('Förstasida')
         .id('homePage')
         .child(S.document().schemaType('homePage').documentId('homePage')),
       ...S.documentTypeListItems().filter(
-        (item) => item.getId() !== 'homePage',
+        (item) =>
+          item.getId() !== 'homePage' && item.getId() !== 'siteSettings',
       ),
     ])

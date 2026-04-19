@@ -3,6 +3,11 @@
 import { motion } from "framer-motion";
 import { Share2, Mail, Phone, Anchor } from "lucide-react";
 import { SITE, OPENING_HOURS } from "@/lib/constants";
+import type { OpeningHourRow } from "@/components/sections/FindUs";
+
+type FooterProps = {
+  openingHours?: OpeningHourRow[];
+};
 import { fadeUp, staggerContainer, VIEWPORT_CONFIG } from "@/lib/animations";
 
 const NAV_LINKS = [
@@ -14,8 +19,14 @@ const NAV_LINKS = [
   { label: "Boka", href: "#boka" },
 ];
 
-export function Footer() {
+export function Footer({ openingHours }: FooterProps) {
   const year = new Date().getFullYear();
+  const fromCms =
+    openingHours?.filter((r) => r.day?.trim() && r.time?.trim()) ?? [];
+  const hours: OpeningHourRow[] =
+    fromCms.length > 0
+      ? fromCms
+      : (OPENING_HOURS as unknown as OpeningHourRow[]);
 
   return (
     <footer
@@ -95,7 +106,7 @@ export function Footer() {
               Öppettider
             </p>
             <dl className="space-y-2.5">
-              {OPENING_HOURS.map((row) => (
+              {hours.map((row) => (
                 <div key={row.day} className="flex justify-between gap-4">
                   <dt className="font-sans text-sm text-[var(--canvas)]/50">{row.day}</dt>
                   <dd className="font-sans text-sm text-[var(--canvas)]/80 tabular-nums">{row.time}</dd>

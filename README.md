@@ -45,6 +45,32 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+Studio: [http://localhost:3000/studio](http://localhost:3000/studio) (kräver `.env.local` med `NEXT_PUBLIC_SANITY_PROJECT_ID`).
+
+### Sanity Presentation visar "Invalid secret"
+
+Det betyder att **preview-läget** inte kan validera mot Next.js. Gör så här:
+
+1. Öppna [sanity.io/manage](https://www.sanity.io/manage) → **Kajmagasinet** → **API** → **Tokens** → **Add API token**.
+2. Ge token **Viewer** eller **Editor** (läs + ev. skriv) — **inte** bara *Deploy Studio*.
+3. Kopiera token till **`.env.local`** (skapa från `.env.example` om du saknar filen):
+
+   ```bash
+   SANITY_API_READ_TOKEN=din-token-här
+   ```
+
+4. **Starta om** utvecklingsservern (`Ctrl+C`, sedan `npm run dev`).
+
+Utan denna token fungerar **Structure** och redigering i Studio, men **Presentation**-förhandsgranskning mot `/api/draft-mode/enable` ger `Invalid secret`.
+
+### Öppettider (kunden redigerar i Studio)
+
+1. Öppna **Studio** → **Webbplats** (singleton).
+2. Under **Öppettider**: ändra rader (Dagar / Tider), lägg till eller ta bort rader.
+3. Klicka **Publicera** så syns ändringen på sajten (efter nästa build/deploy om ni kör statisk hosting, eller direkt vid dev).
+
+Om dokumentet **Webbplats** inte finns än: skapa det genom att öppna posten i listan — standardrader fylls i automatiskt. Tills dess används värden från `lib/constants.ts` som reserv.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

@@ -4,6 +4,13 @@ import { motion } from "framer-motion";
 import { MapPin, Phone, Clock, AtSign, ExternalLink, Anchor } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { SITE, OPENING_HOURS } from "@/lib/constants";
+
+export type OpeningHourRow = { day: string; time: string };
+
+type FindUsProps = {
+  /** Från Sanity (Webbplats). Om den saknas används värden från kod. */
+  openingHours?: OpeningHourRow[];
+};
 import {
   staggerContainer,
   fadeUp,
@@ -12,7 +19,14 @@ import {
   VIEWPORT_CONFIG,
 } from "@/lib/animations";
 
-export function FindUs() {
+export function FindUs({ openingHours }: FindUsProps) {
+  const fromCms =
+    openingHours?.filter((r) => r.day?.trim() && r.time?.trim()) ?? [];
+  const hours: OpeningHourRow[] =
+    fromCms.length > 0
+      ? fromCms
+      : (OPENING_HOURS as unknown as OpeningHourRow[]);
+
   return (
     <section
       id="hitta-oss"
@@ -128,7 +142,7 @@ export function FindUs() {
                 viewport={VIEWPORT_CONFIG}
                 className="space-y-3"
               >
-                {OPENING_HOURS.map((row) => (
+                {hours.map((row) => (
                   <motion.div
                     key={row.day}
                     variants={fadeUp}
