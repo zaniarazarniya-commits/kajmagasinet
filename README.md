@@ -11,7 +11,11 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
    cp .env.example .env.local
    ```
 2. I `.env.local` ska det stå ditt **Project ID** (`NEXT_PUBLIC_SANITY_PROJECT_ID`) och dataset (oftast `production`). Mallen i repot är redan ifylld för Kajmagasinet.
-3. I [Sanity → Kajmagasinet → API → CORS origins](https://www.sanity.io/manage): lägg till `http://localhost:3000` (så Studio i Next-appen får prata med API:t).
+3. **CORS** (så `/studio` får anropa API:t): antingen lägg till `http://localhost:3000` manuellt under **API → CORS origins**, eller kör efter inloggning:
+   ```bash
+   npx sanity login
+   npm run sanity:cors
+   ```
 4. Starta om: `npm run dev` → öppna [http://localhost:3000/studio](http://localhost:3000/studio).
 
 ### På Vercel
