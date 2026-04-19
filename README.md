@@ -7,7 +7,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 3. Set `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` in `.env.local` and in Vercel → Environment Variables
 4. For draft/preview: create a read token and set `SANITY_API_READ_TOKEN` locally and on Vercel
 
-Without these, `npm run build` can fail because the app imports `sanity/env` at build time.
+The app builds without them; `/studio` shows setup instructions until you add a **Project ID**. With a real ID, Studio and live content work.
 
 ## Getting Started
 

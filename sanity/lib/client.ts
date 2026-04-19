@@ -1,6 +1,6 @@
 import { createClient } from 'next-sanity'
 
-import { apiVersion, dataset, projectId } from '../env'
+import { apiVersion, dataset, isSanityConfigured, projectId } from '../env'
 
 const studioUrl =
   process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || 'http://localhost:3000/studio'
@@ -13,6 +13,7 @@ export const client = createClient({
   stega: {
     studioUrl,
     enabled:
+      isSanityConfigured &&
       process.env.NEXT_PUBLIC_SANITY_STEGA_ENABLED !== 'false',
   },
 })

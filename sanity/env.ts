@@ -1,20 +1,22 @@
 export const apiVersion =
   process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2026-04-18'
 
-export const dataset = assertValue(
-  process.env.NEXT_PUBLIC_SANITY_DATASET,
-  'Missing environment variable: NEXT_PUBLIC_SANITY_DATASET'
-)
+const rawProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID?.trim() ?? ''
+const rawDataset =
+  process.env.NEXT_PUBLIC_SANITY_DATASET?.trim() || 'production'
 
-export const projectId = assertValue(
-  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  'Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID'
-)
+/** Sant när riktigt projekt-ID finns — krävs för API, Studio och CDN-bilder */
+export const isSanityConfigured = rawProjectId.length > 0
 
-function assertValue<T>(v: T | undefined, errorMessage: string): T {
-  if (v === undefined) {
-    throw new Error(errorMessage)
-  }
+/**
+ * Dataset (default production). Sätts alltid så CLI/config kan laddas.
+ */
+export const dataset = rawDataset
 
-  return v
-}
+/**
+ * Sanity project ID. Om env saknas används en platshållare så moduler kan importeras
+ * utan att krascha; anrop mot API ska då hoppas över (se isSanityConfigured).
+ */
+export const projectId = isSanityConfigured
+  ? rawProjectId
+  : 'missingProjectId'
