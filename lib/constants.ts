@@ -77,10 +77,10 @@ export const DRINKS: DrinkItem[] = [
     image: "/images/drinks/01-hallon-timjan-collins.png",
   },
   {
-    slug: "klassisk-gin-tonic",
-    name: "Klassisk Gin & Tonic",
-    description: "Torr gin, premium tonic, färsk timjan och citronskal.",
-    image: "/images/drinks/02-klassisk-gin-tonic.png",
+    slug: "blue-lagoon",
+    name: "Blue Lagoon",
+    description: "Vodka, blå curaçao, lime och krossad is.",
+    image: "/images/drinks/07-blue-lagoon.png",
   },
   {
     slug: "espresso-martini",
@@ -88,6 +88,26 @@ export const DRINKS: DrinkItem[] = [
     description:
       "Vodka, kaffelikör, nybryggd espresso och ett krämigt skum.",
     image: "/images/drinks/03-espresso-martini.png",
+  },
+  {
+    slug: "moscow-mule",
+    name: "Moscow Mule",
+    description:
+      "Vodka, lime och ingefära, serveras iskall i klassisk kopparmugg.",
+    image: "/images/drinks/10-moscow-mule.png",
+  },
+  {
+    slug: "mango-daiquiri",
+    name: "Mango Daiquiri",
+    description:
+      "Rom, len mangopuré och lime i en intensivt fruktig mix.",
+    image: "/images/drinks/09-mango-daiquiri.png",
+  },
+  {
+    slug: "klassisk-gin-tonic",
+    name: "Klassisk Gin & Tonic",
+    description: "Torr gin, premium tonic, färsk timjan och citronskal.",
+    image: "/images/drinks/02-klassisk-gin-tonic.png",
   },
   {
     slug: "italienskt-rodvin",
@@ -110,31 +130,11 @@ export const DRINKS: DrinkItem[] = [
     image: "/images/drinks/06-rom-cola.png",
   },
   {
-    slug: "blue-lagoon",
-    name: "Blue Lagoon",
-    description: "Vodka, blå curaçao, lime och krossad is.",
-    image: "/images/drinks/07-blue-lagoon.png",
-  },
-  {
     slug: "pina-colada",
     name: "Piña Colada",
     description:
       "Ljus rom, kokos, färsk ananas och grädde för en krämig känsla.",
     image: "/images/drinks/08-pina-colada.png",
-  },
-  {
-    slug: "mango-daiquiri",
-    name: "Mango Daiquiri",
-    description:
-      "Rom, len mangopuré och lime i en intensivt fruktig mix.",
-    image: "/images/drinks/09-mango-daiquiri.png",
-  },
-  {
-    slug: "moscow-mule",
-    name: "Moscow Mule",
-    description:
-      "Vodka, lime och ingefära, serveras iskall i klassisk kopparmugg.",
-    image: "/images/drinks/10-moscow-mule.png",
   },
 ];
 

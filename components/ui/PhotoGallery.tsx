@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { fadeUp, staggerContainer, VIEWPORT_CONFIG } from "@/lib/animations";
+import { cn } from "@/lib/utils";
 import { isGalleryImageTile, type GalleryTile } from "@/lib/constants";
 
 type PhotoGalleryProps = {
@@ -14,16 +14,51 @@ type PhotoGalleryProps = {
 
 type ImageTile = Extract<GalleryTile, { image: string }>;
 
-/** Liggande kort — större yta så bilder känns mer framträdande jämfört med brödtext */
+/** Liggande kort — samma storlek för alla (ingen “aktiv” som växer) */
 const CARD_BASE =
   "group relative w-[min(88vw,420px)] min-w-[260px] max-w-[420px] sm:min-w-[280px] sm:max-w-[460px] md:w-[min(48vw,480px)] md:min-w-[340px] md:max-w-[480px] lg:w-[min(42vw,520px)] lg:min-w-[380px] lg:max-w-[520px] aspect-[4/3] overflow-hidden rounded-sm border border-[var(--rope)]/20 bg-[var(--ocean-deep)] snap-start shrink-0";
 
 const CARD_IMAGE = `${CARD_BASE} cursor-zoom-in`;
 const CARD_EMPTY = `${CARD_BASE} cursor-default border-dashed border-[var(--rope)]/45 bg-[var(--ocean-deep)]/50 flex flex-col items-center justify-center gap-1`;
 
-/** Karusell: fyll rutan utan synliga “tomma” kanter; mild hover (inte för inzoomat). */
-const THUMB_IMG_CLASS =
-  "h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.02]";
+const IMG_BASE =
+  "h-full w-full object-cover object-center transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.02]";
+
+/** Mjuk infading när bilden är färdigladdad — undviker hack och “hoppar” i storlek */
+function CarouselImage({
+  src,
+  alt,
+  sizes,
+  index,
+}: {
+  src: string;
+  alt: string;
+  sizes: string;
+  index: number;
+}) {
+  const [show, setShow] = useState(false);
+  const reduceMotion = useReducedMotion();
+
+  const visible = show || reduceMotion;
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      sizes={sizes}
+      loading="eager"
+      decoding="async"
+      priority={index < 5}
+      onLoadingComplete={() => setShow(true)}
+      className={cn(
+        IMG_BASE,
+        "transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
+        visible ? "opacity-100" : "opacity-0",
+      )}
+    />
+  );
+}
 
 export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -126,21 +161,21 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
           <ChevronLeft size={18} />
         </button>
 
-        <motion.div
+        <div
           ref={scrollRef}
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VIEWPORT_CONFIG}
-          className="flex gap-4 md:gap-5 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className={cn(
+            "flex gap-4 md:gap-5 overflow-x-auto pb-2 scroll-smooth",
+            /* Mjukare stopp vid svep på mobil än snap-mandatory */
+            "snap-x snap-proximity md:snap-mandatory",
+            "[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+            "overscroll-x-contain touch-pan-x [overflow-scrolling:touch]",
+          )}
         >
           {tiles.map((tile, i) => {
             if (!isGalleryImageTile(tile)) {
               return (
-                <motion.div
+                <div
                   key={tile.id}
-                  variants={fadeUp}
-                  style={{ transitionDelay: `${i * 0.05}s` }}
                   className={CARD_EMPTY}
                   data-gallery-card="true"
                   aria-label="Tom plats för bild"
@@ -148,15 +183,15 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
                   <span className="font-sans text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-[var(--ink-mid)]/45">
                     Tom plats
                   </span>
-                </motion.div>
+                </div>
               );
             }
 
+            const imageIndex = tiles.slice(0, i).filter(isGalleryImageTile).length;
+
             return (
-              <motion.div
+              <div
                 key={tile.id}
-                variants={fadeUp}
-                style={{ transitionDelay: `${i * 0.05}s` }}
                 className={CARD_IMAGE}
                 data-gallery-card="true"
                 onClick={() => openLightbox(tile)}
@@ -169,18 +204,16 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
                   }
                 }}
               >
-                <Image
+                <CarouselImage
                   src={tile.image}
                   alt={tile.alt ?? ""}
-                  fill
                   sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 520px"
-                  className={THUMB_IMG_CLASS}
-                  priority={i < 3}
+                  index={imageIndex}
                 />
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
 
         <button
           type="button"
@@ -210,6 +243,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             onClick={closeLightbox}
             onTouchStart={(e) => {
               touchStartX.current = e.touches[0].clientX;
@@ -266,7 +300,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
                   alt={activeSlide.alt ?? ""}
                   fill
                   sizes="100vw"
-                  className="object-contain object-center"
+                  className="object-contain object-center transition-opacity duration-300 ease-out"
                   priority
                 />
               </div>
