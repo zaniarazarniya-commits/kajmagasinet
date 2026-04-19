@@ -67,66 +67,74 @@ export type DrinkItem = {
  * Drinkar som visas i karusellen på startsidan.
  * När innehåll finns i Sanity används det i stället; detta är reserv.
  */
+/** Standardlista 1–10 (samma ordning som i Sanity ”Drinkar”). Bilder: se public/images/drinks/BILDER-LAS-MIG.md */
 export const DRINKS: DrinkItem[] = [
   {
-    slug: "gin-tonic",
-    name: "Gin & Tonic",
-    description: "Torr gin, tonic, färsk timjan och citronskal.",
-    image: "/images/drinks/gin-tonic.svg",
+    slug: "hallon-timjan-collins",
+    name: "Hallon & Timjan Collins",
+    description:
+      "Ljus rom, hallon, färsk timjan och kolsyrat vatten.",
+    image: "/images/drinks/01-hallon-timjan-collins.png",
   },
   {
-    slug: "dark-rum",
-    name: "Mörk Rom",
-    description: "Mörk rom, lime, ingefära och en skiva apelsin.",
-    image: "/images/drinks/dark-rum.svg",
+    slug: "klassisk-gin-tonic",
+    name: "Klassisk Gin & Tonic",
+    description: "Torr gin, premium tonic, färsk timjan och citronskal.",
+    image: "/images/drinks/02-klassisk-gin-tonic.png",
   },
   {
-    slug: "whisky-sour",
-    name: "Whisky Sour",
-    description: "Bourbon, färskpressad citron, äggvita och angostura.",
-    image: "/images/drinks/whisky-sour.svg",
+    slug: "espresso-martini",
+    name: "Espresso Martini",
+    description:
+      "Vodka, kaffelikör, nybryggd espresso och ett krämigt skum.",
+    image: "/images/drinks/03-espresso-martini.png",
   },
   {
-    slug: "negroni",
-    name: "Negroni",
-    description: "Gin, campari och röd vermouth — rakt upp, apelsinskal.",
-    image: "/images/drinks/negroni.svg",
+    slug: "italienskt-rodvin",
+    name: "Italienskt Rödvin",
+    description:
+      "Vårt eget direktimporterade vin från italienska Vogadori Vini.",
+    image: "/images/drinks/04-italienskt-rodvin.png",
   },
   {
-    slug: "havets-spritz",
-    name: "Havets Spritz",
-    description: "Mousserande, fläderblom, citron och havssalt på kanten.",
-    image: "/images/drinks/havets-spritz.svg",
+    slug: "strawberry-daiquiri",
+    name: "Strawberry Daiquiri",
+    description:
+      "En frostig slushy med färska jordgubbar, lime och ljus rom.",
+    image: "/images/drinks/05-strawberry-daiquiri.png",
   },
   {
-    slug: "alkoholfri",
-    name: "Alkoholfri Bärdrink",
-    description: "Säsongens bär, tonic, basilika och en skvätt lime.",
-    image: "/images/drinks/alkoholfri.svg",
+    slug: "tom-collins",
+    name: "Tom Collins",
+    description: "Gin, citron, socker och soda – en tidlös och frisk klassiker.",
+    image: "/images/drinks/06-tom-collins.png",
   },
   {
-    slug: "drink-07",
-    name: "Drink 07",
-    description: "Placeholder tills du lägger in egen drinkbild och text.",
-    image: "/images/drinks/gin-tonic.svg",
+    slug: "blue-lagoon",
+    name: "Blue Lagoon",
+    description: "Vodka, blå curaçao, lime och krossad is.",
+    image: "/images/drinks/07-blue-lagoon.png",
   },
   {
-    slug: "drink-08",
-    name: "Drink 08",
-    description: "Placeholder tills du lägger in egen drinkbild och text.",
-    image: "/images/drinks/dark-rum.svg",
+    slug: "pina-colada",
+    name: "Piña Colada",
+    description:
+      "Ljus rom, kokos, färsk ananas och grädde för en krämig känsla.",
+    image: "/images/drinks/08-pina-colada.png",
   },
   {
-    slug: "drink-09",
-    name: "Drink 09",
-    description: "Placeholder tills du lägger in egen drinkbild och text.",
-    image: "/images/drinks/whisky-sour.svg",
+    slug: "mango-daiquiri",
+    name: "Mango Daiquiri",
+    description:
+      "Rom, len mangopuré och lime i en intensivt fruktig mix.",
+    image: "/images/drinks/09-mango-daiquiri.png",
   },
   {
-    slug: "drink-10",
-    name: "Drink 10",
-    description: "Placeholder tills du lägger in egen drinkbild och text.",
-    image: "/images/drinks/negroni.svg",
+    slug: "moscow-mule",
+    name: "Moscow Mule",
+    description:
+      "Vodka, lime och ingefära, serveras iskall i klassisk kopparmugg.",
+    image: "/images/drinks/10-moscow-mule.png",
   },
 ];
 
