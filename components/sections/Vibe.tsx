@@ -13,14 +13,14 @@ export function Vibe() {
       className="py-20 md:py-28 px-6 bg-[var(--parchment)]/80 border-t border-[var(--rope)]/12"
       aria-label="Från middag till häng"
     >
-      <div className="max-w-xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <SectionHeading
           variant="editorial"
           eyebrow="Huset"
           title="Från middag till häng"
           subtitle={AFTER_MEAL.subtitle}
           centered
-          className="mb-10 md:mb-12"
+          className="mb-6 md:mb-8"
         />
 
         <motion.p
@@ -28,7 +28,7 @@ export function Vibe() {
           whileInView="visible"
           viewport={VIEWPORT_CONFIG}
           variants={fadeUp}
-          className="font-sans text-[15px] md:text-base text-[var(--ink-mid)]/88 leading-[1.75] text-center"
+          className="font-sans text-[15px] md:text-base text-[var(--ink-mid)]/88 leading-[1.45] text-center max-w-3xl lg:max-w-4xl mx-auto"
         >
           {AFTER_MEAL.body}
         </motion.p>

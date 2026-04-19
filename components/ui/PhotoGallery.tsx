@@ -12,8 +12,9 @@ type PhotoGalleryProps = {
   className?: string;
 };
 
+/** Liggande kort: mer yta för bilden, kompakt text längst ner */
 const CARD_BASE =
-  "group relative w-[44vw] min-w-[150px] max-w-[190px] md:w-[190px] md:min-w-[190px] lg:w-[210px] lg:min-w-[210px] aspect-square overflow-hidden rounded-sm border border-[var(--rope)]/20 bg-[var(--ocean-deep)] snap-start cursor-zoom-in shrink-0";
+  "group relative w-[58vw] min-w-[200px] max-w-[280px] md:w-[260px] md:min-w-[260px] lg:w-[300px] lg:min-w-[300px] aspect-[4/3] overflow-hidden rounded-sm border border-[var(--rope)]/20 bg-[var(--ocean-deep)] snap-start cursor-zoom-in shrink-0";
 
 export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -25,7 +26,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
     const container = scrollRef.current;
     if (!container) return;
     const card = container.querySelector<HTMLElement>("[data-gallery-card='true']");
-    const amount = card ? card.offsetWidth + 16 : 220;
+    const amount = card ? card.offsetWidth + 16 : 280;
     const distance = direction === "left" ? -amount * 2 : amount * 2;
     container.scrollBy({ left: distance, behavior: "smooth" });
   };
@@ -94,7 +95,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
                 src={tile.image}
                 alt={tile.title}
                 fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+                sizes="(max-width: 640px) 60vw, (max-width: 1024px) 40vw, 320px"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                 priority={i < 3}
               />
@@ -102,11 +103,11 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
                 className="absolute inset-0 bg-gradient-to-t from-[rgba(7,13,24,0.88)] via-[rgba(7,13,24,0.35)] to-transparent"
                 aria-hidden="true"
               />
-              <div className="absolute inset-x-0 bottom-0 p-3 md:p-4">
-                <h3 className="font-serif text-base md:text-lg leading-tight text-[var(--canvas)] mb-1">
+              <div className="absolute inset-x-0 bottom-0 p-2.5 md:p-3">
+                <h3 className="font-serif text-sm md:text-base leading-snug text-[var(--canvas)] mb-0.5">
                   {tile.title}
                 </h3>
-                <p className="font-sans text-[11px] md:text-xs leading-relaxed text-[var(--canvas)]/80">
+                <p className="font-sans text-[10px] md:text-[11px] leading-snug text-[var(--canvas)]/80 line-clamp-2">
                   {tile.caption}
                 </p>
               </div>
@@ -149,7 +150,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
               className="w-full max-w-sm"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm border border-white/20 bg-[var(--ocean-deep)]">
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm border border-white/20 bg-[var(--ocean-deep)]">
                 <Image src={activeTile.image} alt={activeTile.title} fill sizes="90vw" className="object-cover" />
                 <button
                   type="button"

@@ -21,7 +21,7 @@ export function Menu() {
           title="Mat för alla tillfällen"
           subtitle="Hos oss hittar du vällagad mat utan krångel. Vi fokuserar på bra råvaror, lokala favoriter och rätter som man faktiskt blir mätt på. Allt från säsongens fisk till en riktigt bra burgare. Vi satsar bara på att det ska smaka riktigt gott, varje gång."
           centered
-          className="mb-10 md:mb-20"
+          className="mb-6 md:mb-12"
         />
 
         <PhotoGallery tiles={MENU_GALLERY_TILES} />

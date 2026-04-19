@@ -37,7 +37,7 @@ export function SectionHeading({
         <motion.p
           variants={fadeUp}
           className={cn(
-            "mb-3",
+            editorial ? "mb-2" : "mb-3",
             editorial
               ? cn(
                   "font-sans text-sm font-normal tracking-normal",
@@ -81,7 +81,9 @@ export function SectionHeading({
         <motion.p
           variants={fadeUp}
           className={cn(
-            "mt-4 text-base leading-[1.65] max-w-xl",
+            editorial
+              ? "mt-3 text-[15px] md:text-base leading-[1.45] max-w-3xl lg:max-w-4xl"
+              : "mt-4 text-base leading-[1.65] max-w-xl",
             centered && "mx-auto",
             editorial && "font-normal",
             light ? "text-[var(--muted-light)]" : "text-[var(--ink-mid)]/90"
