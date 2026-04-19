@@ -19,7 +19,7 @@ export function Menu({ tiles = [...MENU_GALLERY_TILES] }: MenuProps) {
       className="pt-14 pb-20 md:pt-16 md:pb-28 px-6 border-t border-[var(--rope)]/15 bg-[var(--canvas)]"
       aria-label="Meny"
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <SectionHeading
           variant="editorial"
           eyebrow="Servering"
@@ -29,7 +29,7 @@ export function Menu({ tiles = [...MENU_GALLERY_TILES] }: MenuProps) {
           className="mb-6 md:mb-12"
         />
 
-        <PhotoGallery tiles={tiles} />
+        <PhotoGallery tiles={tiles} className="px-0 sm:px-2" />
 
         <motion.div
           initial="hidden"

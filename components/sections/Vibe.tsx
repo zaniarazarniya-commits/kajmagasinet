@@ -39,7 +39,7 @@ export function Vibe({ tiles = [...VIBE_GALLERY_TILES] }: VibeProps) {
         </motion.p>
       </div>
 
-      <div className="max-w-6xl mx-auto mt-10 md:mt-14">
+      <div className="max-w-7xl mx-auto mt-12 md:mt-16 px-0 sm:px-2">
         <PhotoGallery tiles={tiles} />
       </div>
     </section>

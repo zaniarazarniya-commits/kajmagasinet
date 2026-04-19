@@ -32,7 +32,7 @@ export function Heritage({ tiles = [...HERITAGE_GALLERY_TILES] }: HeritageProps)
         />
       </div>
 
-      <PhotoGallery tiles={tiles} className="max-w-6xl mx-auto mt-8 md:mt-12" />
+      <PhotoGallery tiles={tiles} className="max-w-7xl mx-auto mt-10 md:mt-14 px-0 sm:px-2" />
     </section>
   );
 }

@@ -14,9 +14,9 @@ type PhotoGalleryProps = {
 
 type ImageTile = Extract<GalleryTile, { image: string }>;
 
-/** Liggande kort: endast bild (ingen rubrik/text) */
+/** Liggande kort — större yta så bilder känns mer framträdande jämfört med brödtext */
 const CARD_BASE =
-  "group relative w-[58vw] min-w-[200px] max-w-[280px] md:w-[260px] md:min-w-[260px] lg:w-[300px] lg:min-w-[300px] aspect-[4/3] overflow-hidden rounded-sm border border-[var(--rope)]/20 bg-[var(--ocean-deep)] snap-start shrink-0";
+  "group relative w-[min(88vw,420px)] min-w-[260px] max-w-[420px] sm:min-w-[280px] sm:max-w-[460px] md:w-[min(48vw,480px)] md:min-w-[340px] md:max-w-[480px] lg:w-[min(42vw,520px)] lg:min-w-[380px] lg:max-w-[520px] aspect-[4/3] overflow-hidden rounded-sm border border-[var(--rope)]/20 bg-[var(--ocean-deep)] snap-start shrink-0";
 
 const CARD_IMAGE = `${CARD_BASE} cursor-zoom-in`;
 const CARD_EMPTY = `${CARD_BASE} cursor-default border-dashed border-[var(--rope)]/45 bg-[var(--ocean-deep)]/50 flex flex-col items-center justify-center gap-1`;
@@ -83,7 +83,8 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
     const container = scrollRef.current;
     if (!container) return;
     const card = container.querySelector<HTMLElement>("[data-gallery-card='true']");
-    const amount = card ? card.offsetWidth + 16 : 280;
+    const gap = 20;
+    const amount = card ? card.offsetWidth + gap : 320;
     const distance = direction === "left" ? -amount * 2 : amount * 2;
     container.scrollBy({ left: distance, behavior: "smooth" });
   };
@@ -95,7 +96,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
     const updateMetrics = () => {
       const firstCard = container.querySelector<HTMLElement>("[data-gallery-card='true']");
       const cardWidth = firstCard?.offsetWidth ?? 1;
-      const gap = 16;
+      const gap = 20;
       const step = cardWidth + gap;
       const nextIndex = Math.round(container.scrollLeft / step) + 1;
       setCurrentIndex(Math.max(1, Math.min(tiles.length, nextIndex)));
@@ -131,7 +132,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT_CONFIG}
-          className="flex gap-3 md:gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="flex gap-4 md:gap-5 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
           {tiles.map((tile, i) => {
             if (!isGalleryImageTile(tile)) {
@@ -172,7 +173,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
                   src={tile.image}
                   alt={tile.alt ?? ""}
                   fill
-                  sizes="(max-width: 640px) 60vw, (max-width: 1024px) 40vw, 320px"
+                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 520px"
                   className={THUMB_IMG_CLASS}
                   priority={i < 3}
                 />
@@ -258,7 +259,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
                 </button>
               )}
 
-              <div className="relative mx-auto h-[min(82dvh,calc(100dvh-9rem))] w-full max-w-6xl">
+              <div className="relative mx-auto h-[min(85dvh,calc(100dvh-8rem))] w-full max-w-7xl">
                 <Image
                   key={activeSlide.id}
                   src={activeSlide.image}
