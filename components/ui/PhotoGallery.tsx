@@ -60,6 +60,13 @@ function CarouselImage({
   );
 }
 
+function galleryAltText(alt?: string): string {
+  const cleaned = alt?.trim();
+  return cleaned && cleaned.length > 0
+    ? cleaned
+    : "Miljöbild från Kajmagasinet Lysekil";
+}
+
 export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
@@ -206,7 +213,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
               >
                 <CarouselImage
                   src={tile.image}
-                  alt={tile.alt ?? ""}
+                  alt={galleryAltText(tile.alt)}
                   sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 520px"
                   index={imageIndex}
                 />
@@ -297,7 +304,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
                 <Image
                   key={activeSlide.id}
                   src={activeSlide.image}
-                  alt={activeSlide.alt ?? ""}
+                  alt={galleryAltText(activeSlide.alt)}
                   fill
                   sizes="100vw"
                   className="object-contain object-center transition-opacity duration-300 ease-out"

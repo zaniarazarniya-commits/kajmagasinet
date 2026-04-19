@@ -25,8 +25,8 @@ export function Heritage({ tiles = [...HERITAGE_GALLERY_TILES] }: HeritageProps)
         <SectionHeading
           variant="editorial"
           eyebrow="Om oss"
-          title="Huset, kajen och solen"
-          subtitle="Kajmagasinet är mer än bara en restaurang – det är Lysekils naturliga samlingspunkt direkt vid vattnet. Här kan du njuta av sena sommarkvällar på vårt stora trädäck i direkt söderläge, eller slå dig ner i våra rymliga lokaler inomhus när havet friskar på."
+          title="Kajmagasinet i Lysekil"
+          subtitle="Kajmagasinet är en restaurang i Lysekil och en naturlig samlingspunkt direkt vid vattnet. Här kan du njuta av sena sommarkvällar på trädäcket eller slå dig ner i våra rymliga lokaler inomhus."
           centered
           className="mb-1 md:mb-0"
         />

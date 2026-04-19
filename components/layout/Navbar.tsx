@@ -7,10 +7,9 @@ import { SITE } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
 
 const NAV_LINKS = [
-  { label: "Meny", href: "#meny" },
-  { label: "Drinkar", href: "#drinkar" },
-  { label: "Om oss", href: "#arv" },
-  { label: "Hitta hit", href: "#hitta-oss" },
+  { label: "Meny", href: "/meny" },
+  { label: "Kontakt", href: "/kontakt" },
+  { label: "Om oss", href: "/#arv" },
 ];
 
 export function Navbar() {
@@ -40,9 +39,9 @@ export function Navbar() {
         aria-label="Huvudnavigation"
       >
         <a
-          href="#top"
+          href="/"
           className="flex items-center gap-2.5 group"
-          aria-label="Kajmagasinet — till startsidan"
+          aria-label="Kajmagasinet i Lysekil - till startsidan"
         >
           <Anchor
             size={16}
@@ -69,7 +68,11 @@ export function Navbar() {
         </ul>
 
         <div className="hidden md:block">
-          <Button href="#boka" size="sm">
+          <Button
+            href="/boka"
+            size="md"
+            className="shadow-[0_0_0_1px_rgba(207,174,111,0.25),0_8px_24px_rgba(0,0,0,0.25)]"
+          >
             Boka bord
           </Button>
         </div>
@@ -100,7 +103,7 @@ export function Navbar() {
               {link.label}
             </a>
           ))}
-          <Button href="#boka" size="sm" className="self-start mt-2">
+          <Button href="/boka" size="md" className="self-start mt-2">
             Boka bord
           </Button>
         </motion.div>

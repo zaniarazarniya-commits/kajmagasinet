@@ -63,7 +63,7 @@ export function FindUs({ openingHours }: FindUsProps) {
             className="font-serif font-normal text-[var(--canvas)] leading-[1.05] mb-5"
             style={{ fontSize: "clamp(2rem, 5vw, 3.25rem)" }}
           >
-            Välkommen in
+            Kontakt och hitta till Kajmagasinet i Lysekil
           </motion.h2>
           <motion.p
             variants={fadeUp}

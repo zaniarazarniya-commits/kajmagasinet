@@ -11,12 +11,11 @@ type FooterProps = {
 import { fadeUp, staggerContainer, VIEWPORT_CONFIG } from "@/lib/animations";
 
 const NAV_LINKS = [
-  { label: "Om oss", href: "#arv" },
-  { label: "Drinkar", href: "#drinkar" },
-  { label: "Meny", href: "#meny" },
-  { label: "Kväll", href: "#aktiviteter" },
-  { label: "Hitta hit", href: "#hitta-oss" },
-  { label: "Boka", href: "#boka" },
+  { label: "Start", href: "/" },
+  { label: "Meny", href: "/meny" },
+  { label: "Boka bord", href: "/boka" },
+  { label: "Kontakt", href: "/kontakt" },
+  { label: "Om oss", href: "/#arv" },
 ];
 
 export function Footer({ openingHours }: FooterProps) {
@@ -59,7 +58,8 @@ export function Footer({ openingHours }: FooterProps) {
               <p className="font-serif text-xl font-normal text-[var(--canvas)]">{SITE.name}</p>
             </div>
             <p className="font-sans text-sm text-[var(--canvas)]/50 leading-relaxed mb-6">
-              Restaurang och bar vid Rosviksgatan — öppet sedan 2010.
+              Kajmagasinet i Lysekil - restaurang och bar vid Rosviksgatan sedan
+              2010.
             </p>
             <div className="flex gap-2">
               {[

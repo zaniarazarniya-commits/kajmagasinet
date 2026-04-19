@@ -10,7 +10,7 @@ export const SITE = {
   /** Pin mot rätt läge (samma som Google Maps ”Kajmagasinet” vid Rosviksgatan). */
   mapsUrl:
     "https://www.google.com/maps/place/Kajmagasinet/@58.2730708,11.4363266,18z",
-  bookingUrl: "#boka",
+  bookingUrl: "/boka",
 } as const;
 
 export const OPENING_HOURS = [

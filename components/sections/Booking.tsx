@@ -40,7 +40,7 @@ export function Booking() {
             variants={fadeUp}
             className="font-serif text-[clamp(2rem,4vw,3rem)] font-semibold text-[var(--ocean-deep)] mb-4"
           >
-            Boka bord
+            Boka bord på Kajmagasinet i Lysekil
           </motion.h2>
 
           <motion.p

@@ -23,8 +23,8 @@ export function Menu({ tiles = [...MENU_GALLERY_TILES] }: MenuProps) {
         <SectionHeading
           variant="editorial"
           eyebrow="Servering"
-          title="Mat för alla tillfällen"
-          subtitle="Hos oss hittar du vällagad mat utan krångel. Vi fokuserar på bra råvaror, lokala favoriter och rätter som man faktiskt blir mätt på. Allt från säsongens fisk till en riktigt bra burgare. Vi satsar bara på att det ska smaka riktigt gott, varje gång."
+          title="Restaurangmeny i Lysekil"
+          subtitle="Kajmagasinet i Lysekil serverar vällagad mat utan krångel. Vi fokuserar på bra råvaror, lokala favoriter och rätter som man faktiskt blir mätt på."
           centered
           className="mb-6 md:mb-12"
         />
@@ -38,7 +38,7 @@ export function Menu({ tiles = [...MENU_GALLERY_TILES] }: MenuProps) {
           variants={fadeUp}
           className="mt-16 md:mt-20 flex justify-center"
         >
-          <Button href="#boka" variant="subtle" size="md">
+          <Button href="/boka" variant="subtle" size="md">
             Se fullständig meny
           </Button>
         </motion.div>

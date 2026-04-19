@@ -135,7 +135,7 @@ export function Drinks({
                   */}
                   <Image
                     src={current.image}
-                    alt={current.name}
+                    alt={`${current.name} hos Kajmagasinet Lysekil`}
                     fill
                     sizes="(max-width: 768px) 100vw, 40vw"
                     className="object-cover object-center scale-[1.18] origin-center"

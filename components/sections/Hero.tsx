@@ -8,7 +8,7 @@ import { Anchor, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { staggerContainer, fadeUp } from "@/lib/animations";
 
-const DEFAULT_HEADLINE = "Kajmagasinet";
+const DEFAULT_HEADLINE = "Kajmagasinet i Lysekil";
 
 type HeroProps = {
   headline?: string | null;
@@ -45,7 +45,7 @@ export function Hero({
         {heroImageUrl ? (
           <Image
             src={heroImageUrl}
-            alt={heroImageAlt?.trim() || "Förstasidans hjältebild"}
+            alt={heroImageAlt?.trim() || "Kajmagasinet Lysekil vid kajen"}
             fill
             className="object-cover"
             sizes="100vw"
@@ -110,21 +110,25 @@ export function Hero({
             className="font-serif italic text-[var(--canvas)]/75 mb-8 font-normal"
             style={{ fontSize: "clamp(1.05rem, 2vw, 1.35rem)" }}
           >
-            Restaurang och bar vid kajen
+            Restaurang Lysekil vid kajen - boka bord hos Kajmagasinet i Lysekil
           </motion.p>
 
           <motion.div
             variants={fadeUp}
             className="flex flex-col sm:flex-row items-center justify-center gap-3 flex-wrap"
           >
-            <Button href="#boka" size="lg" variant="outline">
+            <Button
+              href="/boka"
+              size="lg"
+              className="shadow-[0_10px_32px_rgba(0,0,0,0.35)]"
+            >
               Boka bord
             </Button>
-            <Button href="#meny" size="lg">
+            <Button href="/meny" size="lg" variant="outline">
               Se menyn
             </Button>
-            <Button href="#drinkar" size="lg" variant="outline">
-              Se drinkar
+            <Button href="/kontakt" size="lg" variant="outline">
+              Kontakt & hitta hit
             </Button>
           </motion.div>
         </motion.div>
