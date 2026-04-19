@@ -2,12 +2,28 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Sanity (CMS)
 
-1. Copy env: `cp .env.example .env.local`
-2. In [sanity.io/manage](https://www.sanity.io/manage) → your **Kajmagasinet** project → **API**, copy **Project ID** and **Dataset** (often `production`)
-3. Set `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` in `.env.local` and in Vercel → Environment Variables
-4. For draft/preview: create a read token and set `SANITY_API_READ_TOKEN` locally and on Vercel
+**Du behöver inte köra `sanity init` igen** – Studio ligger redan i appen på `/studio`.
 
-The app builds without them; `/studio` shows setup instructions until you add a **Project ID**. With a real ID, Studio and live content work.
+### Så får du det att fungera (lokalt)
+
+1. Skapa filen `.env.local` i projektroten (kopiera från mallen):
+   ```bash
+   cp .env.example .env.local
+   ```
+2. I `.env.local` ska det stå ditt **Project ID** (`NEXT_PUBLIC_SANITY_PROJECT_ID`) och dataset (oftast `production`). Mallen i repot är redan ifylld för Kajmagasinet.
+3. I [Sanity → Kajmagasinet → API → CORS origins](https://www.sanity.io/manage): lägg till `http://localhost:3000` (så Studio i Next-appen får prata med API:t).
+4. Starta om: `npm run dev` → öppna [http://localhost:3000/studio](http://localhost:3000/studio).
+
+### På Vercel
+
+Lägg samma variabler under **Settings → Environment Variables** (minst `NEXT_PUBLIC_SANITY_PROJECT_ID` och `NEXT_PUBLIC_SANITY_DATASET`) och deploya om.
+
+### API-token på skärmen
+
+- **Deploy Studio**-token räcker för att deploya Studio separat – **inte** det du klistrar in i `.env` för den här Next-appen.
+- För **utkast/preview** i webben behövs en separat token med **läsrättigheter** → sätt som `SANITY_API_READ_TOKEN` (valfritt).
+
+The app builds without env vars; `/studio` shows setup instructions until **Project ID** is set.
 
 ## Getting Started
 
