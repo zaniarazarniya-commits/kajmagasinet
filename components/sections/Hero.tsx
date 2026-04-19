@@ -120,11 +120,12 @@ export function Hero({
             <Button
               href="/boka"
               size="lg"
+              variant="outline"
               className="shadow-[0_10px_32px_rgba(0,0,0,0.35)]"
             >
               Boka bord
             </Button>
-            <Button href="/meny" size="lg" variant="outline">
+            <Button href="/meny" size="lg">
               Se menyn
             </Button>
             <Button href="/kontakt" size="lg" variant="outline">

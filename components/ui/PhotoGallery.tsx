@@ -206,7 +206,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
             /* Mjukare stopp vid svep på mobil än snap-mandatory */
             "snap-x snap-proximity md:snap-mandatory",
             "[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
-            "overscroll-x-contain touch-pan-x [overflow-scrolling:touch]",
+            "overscroll-x-contain touch-auto [-webkit-overflow-scrolling:touch]",
           )}
         >
           {tiles.map((tile, i) => {
