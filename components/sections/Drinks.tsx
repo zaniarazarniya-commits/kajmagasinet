@@ -78,7 +78,7 @@ export function Drinks({
         />
       </div>
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 overflow-x-clip">
         {/* Rubrik */}
         <div className="text-center mb-6 md:mb-12">
           <div
@@ -104,16 +104,16 @@ export function Drinks({
 
         {/* Karusell — svep vänster/höger för nästa/föregående */}
         <motion.div
-          className="grid md:grid-cols-[1fr_1fr] gap-6 md:gap-16 items-center cursor-grab active:cursor-grabbing select-none"
+          className="grid min-w-0 md:grid-cols-[1fr_1fr] gap-6 md:gap-16 items-center cursor-grab active:cursor-grabbing select-none"
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.12}
           dragDirectionLock
           onDragEnd={onCarouselDragEnd}
         >
-          {/* Bild */}
-          <div className="relative">
-            <div className="relative aspect-[3/4] w-full max-w-[min(100%,380px)] md:max-w-md mx-auto overflow-hidden rounded-[2px] border border-[var(--canvas)]/10 bg-[var(--ocean-deep)]">
+          {/* Bild — min-w-0 + centrerad ram undviker grid-overflow åt höger på mobil */}
+          <div className="relative min-w-0 w-full flex flex-col items-center">
+            <div className="relative aspect-[3/4] w-full max-w-[min(100%,340px)] sm:max-w-[380px] md:max-w-md overflow-hidden rounded-[2px] border border-[var(--canvas)]/10 bg-[var(--ocean-deep)] isolate">
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
                   key={current.slug}
@@ -157,7 +157,7 @@ export function Drinks({
           </div>
 
           {/* Text + kontroller */}
-          <div className="text-center md:text-left">
+          <div className="min-w-0 w-full text-center md:text-left">
             <AnimatePresence mode="wait">
               <motion.div
                 key={current.slug}
@@ -194,28 +194,30 @@ export function Drinks({
               </motion.div>
             </AnimatePresence>
 
-            {/* Navigering */}
-            <div className="mt-8 md:mt-10 flex items-center justify-center md:justify-start gap-4">
-              <button
-                type="button"
-                onPointerDownCapture={(e) => e.stopPropagation()}
-                onClick={prev}
-                aria-label="Föregående drink"
-                className="w-11 h-11 flex items-center justify-center rounded-full border border-[var(--canvas)]/20 text-[var(--canvas)]/80 hover:bg-[var(--canvas)] hover:text-[var(--ocean-deep)] hover:border-[var(--canvas)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]"
-              >
-                <ChevronLeft size={18} strokeWidth={1.5} />
-              </button>
-              <button
-                type="button"
-                onPointerDownCapture={(e) => e.stopPropagation()}
-                onClick={next}
-                aria-label="Nästa drink"
-                className="w-11 h-11 flex items-center justify-center rounded-full border border-[var(--canvas)]/20 text-[var(--canvas)]/80 hover:bg-[var(--canvas)] hover:text-[var(--ocean-deep)] hover:border-[var(--canvas)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]"
-              >
-                <ChevronRight size={18} strokeWidth={1.5} />
-              </button>
+            {/* Navigering — symmetriskt centrerad på mobil (ingen ml-4 som skjuter höger) */}
+            <div className="mt-8 md:mt-10 flex flex-col items-center gap-5 md:flex-row md:justify-start md:gap-4">
+              <div className="flex items-center justify-center gap-4">
+                <button
+                  type="button"
+                  onPointerDownCapture={(e) => e.stopPropagation()}
+                  onClick={prev}
+                  aria-label="Föregående drink"
+                  className="w-11 h-11 flex shrink-0 items-center justify-center rounded-full border border-[var(--canvas)]/20 text-[var(--canvas)]/80 hover:bg-[var(--canvas)] hover:text-[var(--ocean-deep)] hover:border-[var(--canvas)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]"
+                >
+                  <ChevronLeft size={18} strokeWidth={1.5} />
+                </button>
+                <button
+                  type="button"
+                  onPointerDownCapture={(e) => e.stopPropagation()}
+                  onClick={next}
+                  aria-label="Nästa drink"
+                  className="w-11 h-11 flex shrink-0 items-center justify-center rounded-full border border-[var(--canvas)]/20 text-[var(--canvas)]/80 hover:bg-[var(--canvas)] hover:text-[var(--ocean-deep)] hover:border-[var(--canvas)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]"
+                >
+                  <ChevronRight size={18} strokeWidth={1.5} />
+                </button>
+              </div>
 
-              <div className="ml-4 flex items-center gap-1.5">
+              <div className="flex max-w-full flex-wrap items-center justify-center gap-1.5 px-1 md:ml-4 md:max-w-none md:flex-nowrap md:justify-start md:px-0">
                 {drinks.map((d, i) => (
                   <button
                     key={d.slug}
