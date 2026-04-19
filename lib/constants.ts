@@ -55,13 +55,19 @@ export const MENU_CATEGORIES = [
   },
 ] as const;
 
+/** En drink i karusellen (CMS eller fallback nedan). */
+export type DrinkItem = {
+  slug: string;
+  name: string;
+  description: string;
+  image: string;
+};
+
 /**
  * Drinkar som visas i karusellen på startsidan.
- * Lägg till nya genom att:
- *   1. Släng en bild i /public/images/drinks/<slug>.jpg (eller .png/.webp)
- *   2. Lägg till ett objekt här nedan med samma filnamn
+ * När innehåll finns i Sanity används det i stället; detta är reserv.
  */
-export const DRINKS = [
+export const DRINKS: DrinkItem[] = [
   {
     slug: "gin-tonic",
     name: "Gin & Tonic",
@@ -122,7 +128,7 @@ export const DRINKS = [
     description: "Placeholder tills du lägger in egen drinkbild och text.",
     image: "/images/drinks/negroni.svg",
   },
-] as const;
+];
 
 /** Avsnittet "Från middag till häng" — socialt häng efter maten */
 export const AFTER_MEAL = {

@@ -15,3 +15,11 @@ export const pageGalleriesQuery = defineQuery(
     vibeSlides[]{ title, caption, image },
   }`,
 )
+
+export const drinksSectionQuery = defineQuery(
+  `*[_id == "drinksSection"][0]{
+    title,
+    intro,
+    drinks[]{ slug, name, description, image }
+  }`,
+)

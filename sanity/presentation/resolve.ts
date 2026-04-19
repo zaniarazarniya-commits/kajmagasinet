@@ -4,6 +4,7 @@ export const mainDocuments = defineDocuments([
   { route: '/', filter: `_type == "homePage"` },
   { route: '/#hitta-oss', filter: `_type == "siteSettings"` },
   { route: '/#arv', filter: `_type == "pageGalleries"` },
+  { route: '/#drinkar', filter: `_type == "drinksSection"` },
 ])
 
 export const locations = {
@@ -36,6 +37,17 @@ export const locations = {
         { title: 'Bildspel: Om oss', href: '/#arv' },
         { title: 'Bildspel: Servering', href: '/#meny' },
         { title: 'Bildspel: Kväll', href: '/#aktiviteter' },
+      ],
+    }),
+  }),
+  drinksSection: defineLocations({
+    select: { title: 'title' },
+    resolve: (doc) => ({
+      locations: [
+        {
+          title: doc?.title || 'Drinkar (Baren)',
+          href: '/#drinkar',
+        },
       ],
     }),
   }),

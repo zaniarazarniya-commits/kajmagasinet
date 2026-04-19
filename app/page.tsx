@@ -20,8 +20,10 @@ import { client } from "@/sanity/lib/client";
 import { draftClient } from "@/sanity/lib/draftClient";
 import { urlFor } from "@/sanity/lib/image";
 import { isSanityConfigured } from "@/sanity/env";
+import { resolveDrinksSection } from "@/sanity/lib/resolveDrinksSection";
 import { resolveGalleryTiles } from "@/sanity/lib/resolveGalleryTiles";
 import {
+  drinksSectionQuery,
   homePageQuery,
   pageGalleriesQuery,
   siteSettingsQuery,
@@ -63,15 +65,17 @@ export default async function Home() {
   let heritageTiles = [...HERITAGE_GALLERY_TILES];
   let menuTiles = [...MENU_GALLERY_TILES];
   let vibeTiles = [...VIBE_GALLERY_TILES];
+  let drinksResolved = resolveDrinksSection(null);
 
   if (isSanityConfigured) {
     try {
       const activeClient = isEnabled ? draftClient : client;
       const perspective = isEnabled ? "previewDrafts" : "published";
-      const [home, site, galleries] = await Promise.all([
+      const [home, site, galleries, drinksDoc] = await Promise.all([
         activeClient.fetch(homePageQuery, {}, { perspective }),
         activeClient.fetch(siteSettingsQuery, {}, { perspective }),
         activeClient.fetch(pageGalleriesQuery, {}, { perspective }),
+        activeClient.fetch(drinksSectionQuery, {}, { perspective }),
       ]);
       data = home;
       const cmsHours = site?.openingHours?.filter(
@@ -96,6 +100,7 @@ export default async function Home() {
         VIBE_GALLERY_TILES,
         "vibe",
       );
+      drinksResolved = resolveDrinksSection(drinksDoc);
     } catch {
       data = null;
     }
@@ -117,7 +122,11 @@ export default async function Home() {
         />
         <Heritage tiles={heritageTiles} />
         <Menu tiles={menuTiles} />
-        <Drinks />
+        <Drinks
+          drinks={drinksResolved.drinks}
+          sectionTitle={drinksResolved.sectionTitle}
+          sectionIntro={drinksResolved.sectionIntro}
+        />
         <Vibe tiles={vibeTiles} />
         <Booking />
         <FindUs openingHours={openingHours} />

@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "eslint",
     "sanity:cors": "sanity cors add http://localhost:3000 --no-credentials -p u9055wza",
+    "sanity:cors:prod": "sanity cors add https://www.kajmagasinet.se --no-credentials -p u9055wza && sanity cors add https://kajmagasinet.se --no-credentials -p u9055wza",
     "test": "jest",
     "test:watch": "jest --watch"
   },

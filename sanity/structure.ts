@@ -20,6 +20,14 @@ export const structure: StructureResolver = (S) =>
             .documentId('pageGalleries'),
         ),
       S.listItem()
+        .title('Drinkar (Baren)')
+        .id('drinksSection')
+        .child(
+          S.document()
+            .schemaType('drinksSection')
+            .documentId('drinksSection'),
+        ),
+      S.listItem()
         .title('Förstasida')
         .id('homePage')
         .child(S.document().schemaType('homePage').documentId('homePage')),
@@ -27,6 +35,7 @@ export const structure: StructureResolver = (S) =>
         (item) =>
           item.getId() !== 'homePage' &&
           item.getId() !== 'siteSettings' &&
-          item.getId() !== 'pageGalleries',
+          item.getId() !== 'pageGalleries' &&
+          item.getId() !== 'drinksSection',
       ),
     ])

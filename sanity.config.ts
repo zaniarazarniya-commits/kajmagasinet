@@ -39,6 +39,8 @@ export default defineConfig({
         'http://localhost:*',
         'https://localhost:*',
         'https://*.vercel.app',
+        'https://www.kajmagasinet.se',
+        'https://kajmagasinet.se',
       ],
     }),
     // Vision is for querying with GROQ from inside the Studio

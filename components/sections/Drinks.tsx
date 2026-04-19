@@ -4,20 +4,34 @@ import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { Anchor, ChevronLeft, ChevronRight } from "lucide-react";
-import { DRINKS } from "@/lib/constants";
+import { DRINKS, type DrinkItem } from "@/lib/constants";
 
-export function Drinks() {
+const DEFAULT_TITLE = "Något kallt i glaset?";
+const DEFAULT_INTRO =
+  "Baren är hjärtat i huset och här finns verkligen allt. Vi blandar allt från svalkande Daiquiris och kaffedrinkar till att servera kalla, lokala hantverksöl. För vinälskaren har vi något helt unikt: vi importerar våra egna viner direkt från italienska Vogadori Vini – ett exklusivt urval du bara hittar hos oss.";
+
+type DrinksProps = {
+  drinks?: DrinkItem[];
+  sectionTitle?: string;
+  sectionIntro?: string;
+};
+
+export function Drinks({
+  drinks = DRINKS,
+  sectionTitle = DEFAULT_TITLE,
+  sectionIntro = DEFAULT_INTRO,
+}: DrinksProps) {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
 
   const go = useCallback(
     (next: number) => {
-      const total = DRINKS.length;
+      const total = drinks.length;
       const wrapped = ((next % total) + total) % total;
       setDirection(next > index ? 1 : -1);
       setIndex(wrapped);
     },
-    [index]
+    [index, drinks.length]
   );
 
   const prev = useCallback(() => go(index - 1), [go, index]);
@@ -44,7 +58,7 @@ export function Drinks() {
     return () => window.removeEventListener("keydown", onKey);
   }, [prev, next]);
 
-  const current = DRINKS[index];
+  const current = drinks[index];
 
   return (
     <section
@@ -81,14 +95,10 @@ export function Drinks() {
             className="font-serif font-normal text-[var(--canvas)] leading-[1.05] mb-5"
             style={{ fontSize: "clamp(2rem, 5vw, 3.25rem)" }}
           >
-            Något kallt i glaset?
+            {sectionTitle}
           </h2>
           <p className="max-w-3xl lg:max-w-4xl mx-auto text-[var(--canvas)]/70 text-sm md:text-base leading-[1.45] font-sans">
-            Baren är hjärtat i huset och här finns verkligen allt. Vi blandar allt
-            från svalkande Daiquiris och kaffedrinkar till att servera kalla, lokala
-            hantverksöl. För vinälskaren har vi något helt unikt: vi importerar våra
-            egna viner direkt från italienska Vogadori Vini – ett exklusivt urval du
-            bara hittar hos oss.
+            {sectionIntro}
           </p>
         </div>
 
@@ -137,7 +147,7 @@ export function Drinks() {
               </span>
               <span className="h-px w-6 bg-[var(--canvas)]/20" />
               <span className="text-[var(--canvas)]/50 tabular-nums text-sm">
-                {String(DRINKS.length).padStart(2, "0")}
+                {String(drinks.length).padStart(2, "0")}
               </span>
             </div>
           </div>
@@ -163,7 +173,7 @@ export function Drinks() {
                   </span>
                   <span className="h-px w-10 bg-[var(--canvas)]/25" />
                   <span className="text-[var(--canvas)]/45 tabular-nums text-sm">
-                    av {String(DRINKS.length).padStart(2, "0")}
+                    av {String(drinks.length).padStart(2, "0")}
                   </span>
                 </div>
 
@@ -202,7 +212,7 @@ export function Drinks() {
               </button>
 
               <div className="ml-4 flex items-center gap-1.5">
-                {DRINKS.map((d, i) => (
+                {drinks.map((d, i) => (
                   <button
                     key={d.slug}
                     type="button"

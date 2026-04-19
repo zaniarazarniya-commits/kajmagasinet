@@ -22,6 +22,17 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 Lägg samma variabler under **Settings → Environment Variables** (minst `NEXT_PUBLIC_SANITY_PROJECT_ID` och `NEXT_PUBLIC_SANITY_DATASET`) och deploya om.
 
+**Studio på https://www.kajmagasinet.se/studio**
+
+1. Sätt **`NEXT_PUBLIC_SITE_URL=https://www.kajmagasinet.se`** i Vercel (så Presentation/preview pekar rätt).
+2. Under [sanity.io/manage](https://www.sanity.io/manage) → **Kajmagasinet** → **API** → **CORS origins**, lägg till:
+   - `https://www.kajmagasinet.se`
+   - `https://kajmagasinet.se`  
+   (samma som du gjort för `http://localhost:3000` — annars kan Studio på produktion inte prata med API:t.)
+3. Deploya om efter env-ändringar.
+
+   Efter `npx sanity login` kan du även köra **`npm run sanity:cors:prod`** lokalt för att lägga till båda domänerna via CLI.
+
 ### API-token på skärmen
 
 - **Deploy Studio**-token räcker för att deploya Studio separat – **inte** det du klistrar in i `.env` för den här Next-appen.
@@ -70,6 +81,12 @@ Utan denna token fungerar **Structure** och redigering i Studio, men **Presentat
 3. Klicka **Publicera** så syns ändringen på sajten (efter nästa build/deploy om ni kör statisk hosting, eller direkt vid dev).
 
 Om dokumentet **Webbplats** inte finns än: skapa det genom att öppna posten i listan — standardrader fylls i automatiskt. Tills dess används värden från `lib/constants.ts` som reserv.
+
+### Drinkar (Baren)
+
+1. **Studio** → **Drinkar (Baren)**.
+2. Fyll i **Rubrik**, **Ingress** (valfritt — annars standardtext) och lista **Drinkar** (namn, beskrivning/ingredienser, bild).
+3. **Publicera**. Utan dokument eller tom lista används placeholder-drinkar från koden.
 
 ### Bildspel / karuseller (Om oss, Servering, Kväll)
 
