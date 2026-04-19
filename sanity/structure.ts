@@ -12,11 +12,21 @@ export const structure: StructureResolver = (S) =>
           S.document().schemaType('siteSettings').documentId('siteSettings'),
         ),
       S.listItem()
+        .title('Bildspel (startsida)')
+        .id('pageGalleries')
+        .child(
+          S.document()
+            .schemaType('pageGalleries')
+            .documentId('pageGalleries'),
+        ),
+      S.listItem()
         .title('Förstasida')
         .id('homePage')
         .child(S.document().schemaType('homePage').documentId('homePage')),
       ...S.documentTypeListItems().filter(
         (item) =>
-          item.getId() !== 'homePage' && item.getId() !== 'siteSettings',
+          item.getId() !== 'homePage' &&
+          item.getId() !== 'siteSettings' &&
+          item.getId() !== 'pageGalleries',
       ),
     ])

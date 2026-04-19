@@ -5,9 +5,14 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { fadeUp, VIEWPORT_CONFIG } from "@/lib/animations";
 import { PhotoGallery } from "@/components/ui/PhotoGallery";
+import type { GalleryTile } from "@/lib/constants";
 import { MENU_GALLERY_TILES } from "@/lib/constants";
 
-export function Menu() {
+type MenuProps = {
+  tiles?: GalleryTile[];
+};
+
+export function Menu({ tiles = [...MENU_GALLERY_TILES] }: MenuProps) {
   return (
     <section
       id="meny"
@@ -24,7 +29,7 @@ export function Menu() {
           className="mb-6 md:mb-12"
         />
 
-        <PhotoGallery tiles={MENU_GALLERY_TILES} />
+        <PhotoGallery tiles={tiles} />
 
         <motion.div
           initial="hidden"

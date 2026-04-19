@@ -3,9 +3,14 @@
 import { Anchor } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PhotoGallery } from "@/components/ui/PhotoGallery";
+import type { GalleryTile } from "@/lib/constants";
 import { HERITAGE_GALLERY_TILES } from "@/lib/constants";
 
-export function Heritage() {
+type HeritageProps = {
+  tiles?: GalleryTile[];
+};
+
+export function Heritage({ tiles = [...HERITAGE_GALLERY_TILES] }: HeritageProps) {
   return (
     <section
       id="arv"
@@ -27,7 +32,7 @@ export function Heritage() {
         />
       </div>
 
-      <PhotoGallery tiles={HERITAGE_GALLERY_TILES} className="max-w-6xl mx-auto mt-8 md:mt-12" />
+      <PhotoGallery tiles={tiles} className="max-w-6xl mx-auto mt-8 md:mt-12" />
     </section>
   );
 }

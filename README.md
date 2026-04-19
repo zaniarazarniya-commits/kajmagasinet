@@ -71,6 +71,12 @@ Utan denna token fungerar **Structure** och redigering i Studio, men **Presentat
 
 Om dokumentet **Webbplats** inte finns än: skapa det genom att öppna posten i listan — standardrader fylls i automatiskt. Tills dess används värden från `lib/constants.ts` som reserv.
 
+### Bildspel / karuseller (Om oss, Servering, Kväll)
+
+1. **Studio** → **Bildspel (startsida)**.
+2. Tre listor: **Om oss**, **Servering**, **Från middag till häng** — för varje rad: **Rubrik**, **Kort text**, **Bild** (ladda upp). Upp till 12 bilder per sektion.
+3. **Publicera**. Saknas dokumentet eller en rad är tom används placeholder-bilder från koden (`lib/constants.ts`) tills ni laddat upp egna bilder.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

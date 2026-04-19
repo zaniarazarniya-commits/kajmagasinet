@@ -3,10 +3,15 @@
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PhotoGallery } from "@/components/ui/PhotoGallery";
+import type { GalleryTile } from "@/lib/constants";
 import { AFTER_MEAL, VIBE_GALLERY_TILES } from "@/lib/constants";
 import { fadeUp, VIEWPORT_CONFIG } from "@/lib/animations";
 
-export function Vibe() {
+type VibeProps = {
+  tiles?: GalleryTile[];
+};
+
+export function Vibe({ tiles = [...VIBE_GALLERY_TILES] }: VibeProps) {
   return (
     <section
       id="aktiviteter"
@@ -35,7 +40,7 @@ export function Vibe() {
       </div>
 
       <div className="max-w-6xl mx-auto mt-10 md:mt-14">
-        <PhotoGallery tiles={VIBE_GALLERY_TILES} />
+        <PhotoGallery tiles={tiles} />
       </div>
     </section>
   );

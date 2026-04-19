@@ -7,3 +7,11 @@ export const homePageQuery = defineQuery(
 export const siteSettingsQuery = defineQuery(
   `*[_id == "siteSettings"][0]{ openingHours[]{ day, time } }`,
 )
+
+export const pageGalleriesQuery = defineQuery(
+  `*[_id == "pageGalleries"][0]{
+    heritageSlides[]{ title, caption, image },
+    menuSlides[]{ title, caption, image },
+    vibeSlides[]{ title, caption, image },
+  }`,
+)

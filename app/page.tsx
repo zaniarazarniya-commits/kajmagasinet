@@ -10,12 +10,22 @@ import { Vibe } from "@/components/sections/Vibe";
 import { FindUs } from "@/components/sections/FindUs";
 import type { OpeningHourRow } from "@/components/sections/FindUs";
 import { Booking } from "@/components/sections/Booking";
-import { OPENING_HOURS } from "@/lib/constants";
+import {
+  HERITAGE_GALLERY_TILES,
+  MENU_GALLERY_TILES,
+  OPENING_HOURS,
+  VIBE_GALLERY_TILES,
+} from "@/lib/constants";
 import { client } from "@/sanity/lib/client";
 import { draftClient } from "@/sanity/lib/draftClient";
 import { urlFor } from "@/sanity/lib/image";
 import { isSanityConfigured } from "@/sanity/env";
-import { homePageQuery, siteSettingsQuery } from "@/sanity/lib/queries";
+import { resolveGalleryTiles } from "@/sanity/lib/resolveGalleryTiles";
+import {
+  homePageQuery,
+  pageGalleriesQuery,
+  siteSettingsQuery,
+} from "@/sanity/lib/queries";
 
 function isHeroImageWithAsset(
   v: unknown,
@@ -50,13 +60,18 @@ export default async function Home() {
 
   let openingHours: OpeningHourRow[] = OPENING_HOURS as unknown as OpeningHourRow[];
 
+  let heritageTiles = [...HERITAGE_GALLERY_TILES];
+  let menuTiles = [...MENU_GALLERY_TILES];
+  let vibeTiles = [...VIBE_GALLERY_TILES];
+
   if (isSanityConfigured) {
     try {
       const activeClient = isEnabled ? draftClient : client;
       const perspective = isEnabled ? "previewDrafts" : "published";
-      const [home, site] = await Promise.all([
+      const [home, site, galleries] = await Promise.all([
         activeClient.fetch(homePageQuery, {}, { perspective }),
         activeClient.fetch(siteSettingsQuery, {}, { perspective }),
+        activeClient.fetch(pageGalleriesQuery, {}, { perspective }),
       ]);
       data = home;
       const cmsHours = site?.openingHours?.filter(
@@ -66,6 +81,21 @@ export default async function Home() {
       if (cmsHours?.length) {
         openingHours = cmsHours as OpeningHourRow[];
       }
+      heritageTiles = resolveGalleryTiles(
+        galleries?.heritageSlides,
+        HERITAGE_GALLERY_TILES,
+        "heritage",
+      );
+      menuTiles = resolveGalleryTiles(
+        galleries?.menuSlides,
+        MENU_GALLERY_TILES,
+        "menu",
+      );
+      vibeTiles = resolveGalleryTiles(
+        galleries?.vibeSlides,
+        VIBE_GALLERY_TILES,
+        "vibe",
+      );
     } catch {
       data = null;
     }
@@ -85,10 +115,10 @@ export default async function Home() {
           heroImageUrl={heroImageUrl}
           heroImageAlt={heroImageAltFromQuery(data?.heroImage)}
         />
-        <Heritage />
-        <Menu />
+        <Heritage tiles={heritageTiles} />
+        <Menu tiles={menuTiles} />
         <Drinks />
-        <Vibe />
+        <Vibe tiles={vibeTiles} />
         <Booking />
         <FindUs openingHours={openingHours} />
       </main>
