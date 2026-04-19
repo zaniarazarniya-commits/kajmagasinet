@@ -1,5 +1,14 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Sanity (CMS)
+
+1. Copy env: `cp .env.example .env.local`
+2. In [sanity.io/manage](https://www.sanity.io/manage) → your **Kajmagasinet** project → **API**, copy **Project ID** and **Dataset** (often `production`)
+3. Set `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` in `.env.local` and in Vercel → Environment Variables
+4. For draft/preview: create a read token and set `SANITY_API_READ_TOKEN` locally and on Vercel
+
+Without these, `npm run build` can fail because the app imports `sanity/env` at build time.
+
 ## Getting Started
 
 First, run the development server:
