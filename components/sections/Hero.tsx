@@ -8,7 +8,7 @@ import { Anchor, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { staggerContainer, fadeUp } from "@/lib/animations";
 
-const DEFAULT_HEADLINE = "Kajmagasinet i Lysekil";
+const DEFAULT_HEADLINE = "Kajmagasinet";
 
 type HeroProps = {
   headline?: string | null;

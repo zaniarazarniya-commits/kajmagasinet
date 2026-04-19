@@ -167,14 +167,14 @@ const g = galleryImagePath;
 export const HERITAGE_GALLERY_TILES: GalleryTile[] = [
   { id: "heritage-01", image: g("om-oss", "image (1).jpg") },
   { id: "heritage-02", image: g("om-oss", "image (3) - Copy.jpg") },
-  { id: "heritage-03", image: g("om-oss", "image (6).jpg") },
-  { id: "heritage-04", image: g("om-oss", "image (7) - Copy.jpg") },
-  { id: "heritage-05", image: g("om-oss", "image (8) - Copy.jpg") },
-  { id: "heritage-06", image: g("om-oss", "image - Copy.jpg") },
-  { id: "heritage-07", image: g("om-oss", "Snapchat-1028853774.jpg") },
-  { id: "heritage-08", image: g("om-oss", "Snapchat-599691594.jpg") },
-  { id: "heritage-09", image: g("om-oss", "Snapchat-784290965.jpg") },
-  { id: "heritage-10", empty: true },
+  { id: "heritage-03", image: g("om-oss", "image (3).jpg") },
+  { id: "heritage-04", image: g("om-oss", "image - Copy.jpg") },
+  { id: "heritage-05", image: g("om-oss", "image.jpg") },
+  { id: "heritage-06", image: g("om-oss", "image (6).jpg") },
+  { id: "heritage-07", image: g("om-oss", "image (7) - Copy.jpg") },
+  { id: "heritage-08", image: g("om-oss", "image (8) - Copy.jpg") },
+  { id: "heritage-09", image: g("om-oss", "dsf.jpg") },
+  { id: "heritage-10", image: g("om-oss", "sdad.jpg") },
 ];
 
 export const MENU_GALLERY_TILES: GalleryTile[] = [
@@ -192,13 +192,13 @@ export const MENU_GALLERY_TILES: GalleryTile[] = [
 
 export const VIBE_GALLERY_TILES: GalleryTile[] = [
   { id: "vibe-01", image: g("huset", "dfs.jpg") },
-  { id: "vibe-02", image: g("huset", "image (1).jpg") },
+  { id: "vibe-02", image: g("huset", "image.jpg") },
   { id: "vibe-03", image: g("huset", "image (2).jpg") },
   { id: "vibe-04", image: g("huset", "image (3).jpg") },
-  { id: "vibe-05", image: g("huset", "image (5).jpg") },
-  { id: "vibe-06", image: g("huset", "image.jpg") },
-  { id: "vibe-07", image: g("huset", "Snapchat-730301977.jpg") },
-  { id: "vibe-08", empty: true },
-  { id: "vibe-09", empty: true },
-  { id: "vibe-10", empty: true },
+  { id: "vibe-05", image: g("huset", "image (4).jpg") },
+  { id: "vibe-06", image: g("huset", "image (5).jpg") },
+  { id: "vibe-07", image: g("huset", "image (6).jpg") },
+  { id: "vibe-08", image: g("huset", "a.jpg") },
+  { id: "vibe-09", image: g("huset", "aa.jpg") },
+  { id: "vibe-10", image: g("huset", "sdf.jpg") },
 ];
