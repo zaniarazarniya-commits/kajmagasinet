@@ -127,14 +127,18 @@ export function Drinks({
                     damping: 38,
                     mass: 0.85,
                   }}
-                  className="absolute inset-0"
+                  className="absolute inset-0 overflow-hidden"
                 >
+                  {/*
+                    Lätt inzoomning: beskär kanter så Gemini-vattenstämplar i hörn
+                    och tunna ljusa linjer i originalbilden syns mindre. Justera scale om needed.
+                  */}
                   <Image
                     src={current.image}
                     alt={current.name}
                     fill
                     sizes="(max-width: 768px) 100vw, 40vw"
-                    className="object-contain object-center"
+                    className="object-cover object-center scale-[1.18] origin-center"
                   />
                 </motion.div>
               </AnimatePresence>
