@@ -104,10 +104,10 @@ export const DRINKS: DrinkItem[] = [
     image: "/images/drinks/05-strawberry-daiquiri.png",
   },
   {
-    slug: "tom-collins",
-    name: "Tom Collins",
-    description: "Gin, citron, socker och soda – en tidlös och frisk klassiker.",
-    image: "/images/drinks/06-tom-collins.png",
+    slug: "rom-cola",
+    name: "Rom & Cola",
+    description: "Mörk rom och cola med lime – en avslappnad klassiker.",
+    image: "/images/drinks/06-rom-cola.png",
   },
   {
     slug: "blue-lagoon",

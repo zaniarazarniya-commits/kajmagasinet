@@ -9,7 +9,7 @@ Lägg dina **PNG**-filer här med **exakt** dessa filnamn så matchar de listan 
 | 03 | `03-espresso-martini.png` |
 | 04 | `04-italienskt-rodvin.png` |
 | 05 | `05-strawberry-daiquiri.png` |
-| 06 | `06-tom-collins.png` |
+| 06 | `06-rom-cola.png` |
 | 07 | `07-blue-lagoon.png` |
 | 08 | `08-pina-colada.png` |
 | 09 | `09-mango-daiquiri.png` |
@@ -27,7 +27,7 @@ Om du använder **Sanity** med uppladdade bilder behövs dessa filer inte — d�
 | Espresso Martini | `03-espresso-martini.png` |
 | Italienskt Rödvin | `04-italienskt-rodvin.png` |
 | Strawberry Daiquiri | `05-strawberry-daiquiri.png` |
-| Tom Collins (eller motsv. bild) | `06-tom-collins.png` |
+| Rom & Cola | `06-rom-cola.png` |
 | Blue Lagoon | `07-blue-lagoon.png` |
 | Piña Colada | `08-pina-colada.png` |
 | Mango Daiquiri | `09-mango-daiquiri.png` |
