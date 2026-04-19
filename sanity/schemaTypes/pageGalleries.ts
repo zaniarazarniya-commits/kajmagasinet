@@ -6,19 +6,6 @@ const gallerySlide = defineArrayMember({
   title: 'Bild',
   fields: [
     defineField({
-      name: 'title',
-      title: 'Rubrik',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'caption',
-      title: 'Kort text',
-      type: 'text',
-      rows: 2,
-      description: 'Visas under bilden i karusellen',
-    }),
-    defineField({
       name: 'image',
       title: 'Bild',
       type: 'image',
@@ -27,17 +14,17 @@ const gallerySlide = defineArrayMember({
         defineField({
           name: 'alt',
           type: 'string',
-          title: 'Alternativtext',
-          description: 'För tillgänglighet',
+          title: 'Alternativtext (valfritt)',
+          description: 'För skärmläsare; visas inte som rubrik på sajten',
         }),
       ],
       validation: (Rule) => Rule.required(),
     }),
   ],
   preview: {
-    select: { title: 'title', media: 'image' },
-    prepare({ title, media }) {
-      return { title: title || 'Bild', media }
+    select: { media: 'image' },
+    prepare({ media }) {
+      return { title: 'Bild', media }
     },
   },
 })

@@ -10,9 +10,9 @@ export const siteSettingsQuery = defineQuery(
 
 export const pageGalleriesQuery = defineQuery(
   `*[_id == "pageGalleries"][0]{
-    heritageSlides[]{ title, caption, image },
-    menuSlides[]{ title, caption, image },
-    vibeSlides[]{ title, caption, image },
+    heritageSlides[]{ image },
+    menuSlides[]{ image },
+    vibeSlides[]{ image },
   }`,
 )
 
