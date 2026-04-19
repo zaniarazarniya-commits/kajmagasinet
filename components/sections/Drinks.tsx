@@ -113,7 +113,7 @@ export function Drinks({
         >
           {/* Bild */}
           <div className="relative">
-            <div className="relative aspect-[4/3] w-full max-w-[min(100%,420px)] md:max-w-xl mx-auto overflow-hidden rounded-[2px] border border-[var(--canvas)]/10 bg-[var(--ocean-abyss)]">
+            <div className="relative aspect-[3/4] w-full max-w-[min(100%,380px)] md:max-w-md mx-auto overflow-hidden rounded-[2px] border border-[var(--canvas)]/10 bg-[var(--ocean-deep)]">
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
                   key={current.slug}
@@ -134,7 +134,7 @@ export function Drinks({
                     alt={current.name}
                     fill
                     sizes="(max-width: 768px) 100vw, 40vw"
-                    className="object-cover"
+                    className="object-contain object-center"
                   />
                 </motion.div>
               </AnimatePresence>
