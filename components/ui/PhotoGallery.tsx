@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
@@ -12,6 +12,8 @@ type PhotoGalleryProps = {
   className?: string;
 };
 
+type ImageTile = Extract<GalleryTile, { image: string }>;
+
 /** Liggande kort: endast bild (ingen rubrik/text) */
 const CARD_BASE =
   "group relative w-[58vw] min-w-[200px] max-w-[280px] md:w-[260px] md:min-w-[260px] lg:w-[300px] lg:min-w-[300px] aspect-[4/3] overflow-hidden rounded-sm border border-[var(--rope)]/20 bg-[var(--ocean-deep)] snap-start shrink-0";
@@ -19,13 +21,63 @@ const CARD_BASE =
 const CARD_IMAGE = `${CARD_BASE} cursor-zoom-in`;
 const CARD_EMPTY = `${CARD_BASE} cursor-default border-dashed border-[var(--rope)]/45 bg-[var(--ocean-deep)]/50 flex flex-col items-center justify-center gap-1`;
 
+/** Karusell: fyll rutan utan synliga “tomma” kanter; mild hover (inte för inzoomat). */
+const THUMB_IMG_CLASS =
+  "h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.02]";
+
 export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeTile, setActiveTile] = useState<
-    Extract<GalleryTile, { image: string }> | null
-  >(null);
+  const touchStartX = useRef<number | null>(null);
+
+  const imageTiles = useMemo(() => tiles.filter(isGalleryImageTile), [tiles]);
+
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [currentIndex, setCurrentIndex] = useState(1);
   const [canScroll, setCanScroll] = useState(false);
+
+  const openLightbox = useCallback(
+    (tile: ImageTile) => {
+      const idx = imageTiles.findIndex((t) => t.id === tile.id);
+      setLightboxIndex(idx >= 0 ? idx : 0);
+    },
+    [imageTiles],
+  );
+
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+
+  const goPrev = useCallback(() => {
+    setLightboxIndex((i) => {
+      if (i === null || imageTiles.length < 2) return i;
+      return i <= 0 ? imageTiles.length - 1 : i - 1;
+    });
+  }, [imageTiles.length]);
+
+  const goNext = useCallback(() => {
+    setLightboxIndex((i) => {
+      if (i === null || imageTiles.length < 2) return i;
+      return i >= imageTiles.length - 1 ? 0 : i + 1;
+    });
+  }, [imageTiles.length]);
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "ArrowRight") goNext();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightboxIndex, closeLightbox, goPrev, goNext]);
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [lightboxIndex]);
 
   const scrollByCards = (direction: "left" | "right") => {
     const container = scrollRef.current;
@@ -58,6 +110,8 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
       window.removeEventListener("resize", updateMetrics);
     };
   }, [tiles.length]);
+
+  const activeSlide = lightboxIndex !== null ? imageTiles[lightboxIndex] : null;
 
   return (
     <>
@@ -104,13 +158,13 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
                 style={{ transitionDelay: `${i * 0.05}s` }}
                 className={CARD_IMAGE}
                 data-gallery-card="true"
-                onClick={() => setActiveTile(tile)}
+                onClick={() => openLightbox(tile)}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
-                    setActiveTile(tile);
+                    openLightbox(tile);
                   }
                 }}
               >
@@ -119,7 +173,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
                   alt={tile.alt ?? ""}
                   fill
                   sizes="(max-width: 640px) 60vw, (max-width: 1024px) 40vw, 320px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className={THUMB_IMG_CLASS}
                   priority={i < 3}
                 />
               </motion.div>
@@ -146,35 +200,94 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
       )}
 
       <AnimatePresence>
-        {activeTile && (
+        {activeSlide && lightboxIndex !== null && (
           <motion.div
-            className="fixed inset-0 z-[70] md:hidden bg-black/70 backdrop-blur-sm p-4 flex items-center justify-center"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Bildvisning"
+            className="fixed inset-0 z-[70] flex flex-col bg-black/90 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setActiveTile(null)}
+            onClick={closeLightbox}
+            onTouchStart={(e) => {
+              touchStartX.current = e.touches[0].clientX;
+            }}
+            onTouchEnd={(e) => {
+              if (touchStartX.current === null) return;
+              const x = e.changedTouches[0].clientX;
+              const delta = x - touchStartX.current;
+              touchStartX.current = null;
+              if (Math.abs(delta) < 48) return;
+              if (delta > 0) goPrev();
+              else goNext();
+            }}
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 8 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 8 }}
-              transition={{ duration: 0.2 }}
-              className="w-full max-w-sm"
+            <div className="flex shrink-0 items-center justify-between gap-2 px-3 py-3 md:px-6">
+              <p className="font-sans text-xs tracking-[0.2em] uppercase text-white/75">
+                {lightboxIndex + 1} / {imageTiles.length}
+              </p>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeLightbox();
+                }}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
+                aria-label="Stäng"
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+            <div
+              className="relative flex min-h-0 flex-1 items-center justify-center px-2 pb-6 md:px-8"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm border border-white/20 bg-[var(--ocean-deep)]">
-                <Image src={activeTile.image} alt={activeTile.alt ?? ""} fill sizes="90vw" className="object-cover" />
+              {imageTiles.length > 1 && (
                 <button
                   type="button"
-                  onClick={() => setActiveTile(null)}
-                  className="absolute top-2 right-2 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center"
-                  aria-label="Stäng bild"
+                  aria-label="Föregående bild"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goPrev();
+                  }}
+                  className="absolute left-1 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-black/60 md:left-4 md:h-12 md:w-12"
                 >
-                  <X size={18} />
+                  <ChevronLeft size={26} />
                 </button>
+              )}
+
+              <div className="relative mx-auto h-[min(82dvh,calc(100dvh-9rem))] w-full max-w-6xl">
+                <Image
+                  key={activeSlide.id}
+                  src={activeSlide.image}
+                  alt={activeSlide.alt ?? ""}
+                  fill
+                  sizes="100vw"
+                  className="object-contain object-center"
+                  priority
+                />
               </div>
-              <p className="text-center text-xs text-white/80 mt-3">Tryck utanför bilden för att stänga</p>
-            </motion.div>
+
+              {imageTiles.length > 1 && (
+                <button
+                  type="button"
+                  aria-label="Nästa bild"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goNext();
+                  }}
+                  className="absolute right-1 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-black/60 md:right-4 md:h-12 md:w-12"
+                >
+                  <ChevronRight size={26} />
+                </button>
+              )}
+            </div>
+
+            <p className="shrink-0 pb-4 text-center font-sans text-[11px] text-white/55 md:pb-6 [padding-bottom:max(1rem,env(safe-area-inset-bottom))]">
+              Pilar eller svep · Esc stänger
+            </p>
           </motion.div>
         )}
       </AnimatePresence>
