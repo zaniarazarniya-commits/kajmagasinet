@@ -16,7 +16,7 @@ type ImageTile = Extract<GalleryTile, { image: string }>;
 
 /** Liggande kort — samma storlek för alla (ingen “aktiv” som växer) */
 const CARD_BASE =
-  "group relative w-[min(88vw,420px)] min-w-[260px] max-w-[420px] sm:min-w-[280px] sm:max-w-[460px] md:w-[min(48vw,480px)] md:min-w-[340px] md:max-w-[480px] lg:w-[min(42vw,520px)] lg:min-w-[380px] lg:max-w-[520px] aspect-[4/3] overflow-hidden rounded-sm border border-[var(--rope)]/20 bg-[var(--ocean-deep)] snap-start shrink-0";
+  "group relative w-[min(88vw,420px)] min-w-[260px] max-w-[420px] sm:min-w-[280px] sm:max-w-[460px] md:w-[min(48vw,480px)] md:min-w-[340px] md:max-w-[480px] lg:w-[min(42vw,520px)] lg:min-w-[380px] lg:max-w-[520px] aspect-[4/3] overflow-hidden rounded-sm border border-[var(--rope)]/20 bg-[var(--ocean-deep)] snap-start snap-always shrink-0";
 
 const CARD_IMAGE = `${CARD_BASE} cursor-zoom-in`;
 const CARD_EMPTY = `${CARD_BASE} cursor-default border-dashed border-[var(--rope)]/45 bg-[var(--ocean-deep)]/50 flex flex-col items-center justify-center gap-1`;
@@ -70,6 +70,8 @@ function galleryAltText(alt?: string): string {
 export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
+  const lightboxOpenRef = useRef(false);
+  const historyEntryAddedRef = useRef(false);
 
   const imageTiles = useMemo(() => tiles.filter(isGalleryImageTile), [tiles]);
 
@@ -85,7 +87,13 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
     [imageTiles],
   );
 
-  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+  const closeLightbox = useCallback(() => {
+    if (lightboxOpenRef.current && historyEntryAddedRef.current) {
+      window.history.back();
+      return;
+    }
+    setLightboxIndex(null);
+  }, []);
 
   const goPrev = useCallback(() => {
     setLightboxIndex((i) => {
@@ -113,6 +121,29 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
   }, [lightboxIndex, closeLightbox, goPrev, goNext]);
 
   useEffect(() => {
+    lightboxOpenRef.current = lightboxIndex !== null;
+
+    if (lightboxIndex !== null && !historyEntryAddedRef.current) {
+      window.history.pushState({ photoGallery: true }, "");
+      historyEntryAddedRef.current = true;
+    }
+
+    if (lightboxIndex === null) {
+      historyEntryAddedRef.current = false;
+    }
+  }, [lightboxIndex]);
+
+  useEffect(() => {
+    const onPopState = () => {
+      if (lightboxOpenRef.current) {
+        setLightboxIndex(null);
+      }
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  useEffect(() => {
     if (lightboxIndex === null) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -127,7 +158,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
     const card = container.querySelector<HTMLElement>("[data-gallery-card='true']");
     const gap = 20;
     const amount = card ? card.offsetWidth + gap : 320;
-    const distance = direction === "left" ? -amount * 2 : amount * 2;
+    const distance = direction === "left" ? -amount : amount;
     container.scrollBy({ left: distance, behavior: "smooth" });
   };
 
@@ -260,7 +291,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
               const x = e.changedTouches[0].clientX;
               const delta = x - touchStartX.current;
               touchStartX.current = null;
-              if (Math.abs(delta) < 48) return;
+              if (Math.abs(delta) < 72) return;
               if (delta > 0) goPrev();
               else goNext();
             }}
