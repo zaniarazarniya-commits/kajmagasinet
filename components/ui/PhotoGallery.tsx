@@ -5,20 +5,25 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { fadeUp, staggerContainer, VIEWPORT_CONFIG } from "@/lib/animations";
-import type { GalleryTile } from "@/lib/constants";
+import { isGalleryImageTile, type GalleryTile } from "@/lib/constants";
 
 type PhotoGalleryProps = {
   tiles: GalleryTile[];
   className?: string;
 };
 
-/** Liggande kort: mer yta för bilden, kompakt text längst ner */
+/** Liggande kort: endast bild (ingen rubrik/text) */
 const CARD_BASE =
-  "group relative w-[58vw] min-w-[200px] max-w-[280px] md:w-[260px] md:min-w-[260px] lg:w-[300px] lg:min-w-[300px] aspect-[4/3] overflow-hidden rounded-sm border border-[var(--rope)]/20 bg-[var(--ocean-deep)] snap-start cursor-zoom-in shrink-0";
+  "group relative w-[58vw] min-w-[200px] max-w-[280px] md:w-[260px] md:min-w-[260px] lg:w-[300px] lg:min-w-[300px] aspect-[4/3] overflow-hidden rounded-sm border border-[var(--rope)]/20 bg-[var(--ocean-deep)] snap-start shrink-0";
+
+const CARD_IMAGE = `${CARD_BASE} cursor-zoom-in`;
+const CARD_EMPTY = `${CARD_BASE} cursor-default border-dashed border-[var(--rope)]/45 bg-[var(--ocean-deep)]/50 flex flex-col items-center justify-center gap-1`;
 
 export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeTile, setActiveTile] = useState<GalleryTile | null>(null);
+  const [activeTile, setActiveTile] = useState<
+    Extract<GalleryTile, { image: string }> | null
+  >(null);
   const [currentIndex, setCurrentIndex] = useState(1);
   const [canScroll, setCanScroll] = useState(false);
 
@@ -74,45 +79,52 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
           viewport={VIEWPORT_CONFIG}
           className="flex gap-3 md:gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
-          {tiles.map((tile, i) => (
-            <motion.div
-              key={tile.id}
-              variants={fadeUp}
-              style={{ transitionDelay: `${i * 0.05}s` }}
-              className={CARD_BASE}
-              data-gallery-card="true"
-              onClick={() => setActiveTile(tile)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setActiveTile(tile);
-                }
-              }}
-            >
-              <Image
-                src={tile.image}
-                alt={tile.title}
-                fill
-                sizes="(max-width: 640px) 60vw, (max-width: 1024px) 40vw, 320px"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                priority={i < 3}
-              />
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-[rgba(7,13,24,0.88)] via-[rgba(7,13,24,0.35)] to-transparent"
-                aria-hidden="true"
-              />
-              <div className="absolute inset-x-0 bottom-0 p-2.5 md:p-3">
-                <h3 className="font-serif text-sm md:text-base leading-snug text-[var(--canvas)] mb-0.5">
-                  {tile.title}
-                </h3>
-                <p className="font-sans text-[10px] md:text-[11px] leading-snug text-[var(--canvas)]/80 line-clamp-2">
-                  {tile.caption}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+          {tiles.map((tile, i) => {
+            if (!isGalleryImageTile(tile)) {
+              return (
+                <motion.div
+                  key={tile.id}
+                  variants={fadeUp}
+                  style={{ transitionDelay: `${i * 0.05}s` }}
+                  className={CARD_EMPTY}
+                  data-gallery-card="true"
+                  aria-label="Tom plats för bild"
+                >
+                  <span className="font-sans text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-[var(--ink-mid)]/45">
+                    Tom plats
+                  </span>
+                </motion.div>
+              );
+            }
+
+            return (
+              <motion.div
+                key={tile.id}
+                variants={fadeUp}
+                style={{ transitionDelay: `${i * 0.05}s` }}
+                className={CARD_IMAGE}
+                data-gallery-card="true"
+                onClick={() => setActiveTile(tile)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setActiveTile(tile);
+                  }
+                }}
+              >
+                <Image
+                  src={tile.image}
+                  alt={tile.alt ?? ""}
+                  fill
+                  sizes="(max-width: 640px) 60vw, (max-width: 1024px) 40vw, 320px"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  priority={i < 3}
+                />
+              </motion.div>
+            );
+          })}
         </motion.div>
 
         <button
@@ -151,7 +163,7 @@ export function PhotoGallery({ tiles, className = "" }: PhotoGalleryProps) {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm border border-white/20 bg-[var(--ocean-deep)]">
-                <Image src={activeTile.image} alt={activeTile.title} fill sizes="90vw" className="object-cover" />
+                <Image src={activeTile.image} alt={activeTile.alt ?? ""} fill sizes="90vw" className="object-cover" />
                 <button
                   type="button"
                   onClick={() => setActiveTile(null)}
