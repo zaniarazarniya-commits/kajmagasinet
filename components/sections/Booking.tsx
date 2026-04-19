@@ -13,7 +13,7 @@ export function Booking() {
       className="py-24 px-6 canvas-bg"
       aria-label="Boka bord"
     >
-      <div className="max-w-3xl mx-auto text-center">
+      <div className="max-w-4xl mx-auto text-center">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
@@ -45,7 +45,7 @@ export function Booking() {
 
           <motion.p
             variants={fadeUp}
-            className="font-sans text-[var(--ink-mid)] leading-relaxed mb-10 max-w-lg mx-auto"
+            className="font-sans text-[var(--ink-mid)] leading-[1.45] mb-6 max-w-3xl lg:max-w-4xl mx-auto"
           >
             Hör av dig med datum, tid och antal gäster — så återkommer vi med bekräftelse.
             Större sällskap och terrassbokning hanteras i mån av plats.

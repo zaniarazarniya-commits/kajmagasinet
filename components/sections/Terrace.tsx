@@ -17,7 +17,7 @@ export function Terrace() {
       className="py-20 md:py-28 px-6 overflow-hidden bg-[var(--canvas)] border-t border-[var(--rope)]/15"
       aria-label="Terrassen"
     >
-      <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-14 items-center">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -26,7 +26,7 @@ export function Terrace() {
           className="relative"
         >
           <div
-            className="relative aspect-[4/5] max-h-[min(520px,70vh)] rounded-sm overflow-hidden bg-[var(--ocean-mid)]/10"
+            className="relative aspect-[4/3] max-h-[min(480px,65vh)] rounded-sm overflow-hidden bg-[var(--ocean-mid)]/10"
             aria-hidden="true"
           >
             <div
@@ -78,14 +78,14 @@ export function Terrace() {
             initial="hidden"
             whileInView="visible"
             viewport={VIEWPORT_CONFIG}
-            className="mt-8 space-y-5"
+            className="mt-5 space-y-3"
             role="list"
           >
             {TERRACE_LINES.map((text) => (
               <motion.li
                 key={text}
                 variants={fadeUp}
-                className="font-sans text-[15px] text-[var(--ink-mid)]/88 leading-relaxed pl-4 border-l border-[var(--brass)]/25"
+                className="font-sans text-[15px] text-[var(--ink-mid)]/88 leading-snug pl-4 border-l border-[var(--brass)]/25"
               >
                 {text}
               </motion.li>
@@ -97,7 +97,7 @@ export function Terrace() {
             initial="hidden"
             whileInView="visible"
             viewport={VIEWPORT_CONFIG}
-            className="mt-10 font-sans text-sm text-[var(--ink-mid)]/65 leading-relaxed"
+            className="mt-6 font-sans text-sm text-[var(--ink-mid)]/65 leading-snug"
           >
             Sedan 2010 på Rosviksgatan — biljard och dart inne, servering utomhus maj–september.
           </motion.p>

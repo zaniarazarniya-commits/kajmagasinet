@@ -31,7 +31,7 @@ export function FindUs() {
 
         {/* Rubrik */}
         <motion.div
-          className="mb-16 md:mb-20"
+          className="mb-12 md:mb-14"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
@@ -53,7 +53,7 @@ export function FindUs() {
           </motion.h2>
           <motion.p
             variants={fadeUp}
-            className="max-w-lg text-[var(--canvas)]/65 text-[15px] md:text-base leading-[1.75] font-sans"
+            className="max-w-3xl lg:max-w-4xl text-[var(--canvas)]/65 text-[15px] md:text-base leading-[1.45] font-sans"
           >
             Vi håller hus mitt i Lysekil, ett stenkast från hamnen.
             Kom som du är — ensam, med sällskap eller utan plan.

@@ -77,12 +77,12 @@ export function Hero({
       {/* Innehåll */}
       <motion.div
         style={{ opacity }}
-        className="relative z-30 text-center px-6 max-w-2xl mx-auto"
+        className="relative z-30 text-center px-6 max-w-4xl mx-auto"
       >
         <motion.div variants={staggerContainer} initial="hidden" animate="visible">
           <motion.div
             variants={fadeUp}
-            className="flex items-center justify-center gap-4 mb-8"
+            className="flex items-center justify-center gap-4 mb-6"
             aria-hidden="true"
           >
             <span className="h-px w-10 bg-[var(--brass)]/70" />
@@ -92,14 +92,14 @@ export function Hero({
 
           <motion.p
             variants={fadeUp}
-            className="text-[10px] md:text-[11px] font-sans font-medium uppercase tracking-[0.32em] text-[var(--brass-light)]/85 mb-6"
+            className="text-[10px] md:text-[11px] font-sans font-medium uppercase tracking-[0.32em] text-[var(--brass-light)]/85 mb-4"
           >
             Lysekil · sedan 2010
           </motion.p>
 
           <motion.h1
             variants={fadeUp}
-            className="font-serif font-normal text-[var(--canvas)] leading-[0.98] mb-6"
+            className="font-serif font-normal text-[var(--canvas)] leading-[0.98] mb-4"
             style={{ fontSize: "clamp(3rem, 8vw, 5.75rem)" }}
           >
             {title}
@@ -107,7 +107,7 @@ export function Hero({
 
           <motion.p
             variants={fadeUp}
-            className="font-serif italic text-[var(--canvas)]/75 mb-10 font-normal"
+            className="font-serif italic text-[var(--canvas)]/75 mb-8 font-normal"
             style={{ fontSize: "clamp(1.05rem, 2vw, 1.35rem)" }}
           >
             Restaurang och bar vid kajen

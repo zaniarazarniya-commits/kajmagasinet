@@ -66,7 +66,7 @@ export function Drinks() {
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
         {/* Rubrik */}
-        <div className="text-center mb-10 md:mb-20">
+        <div className="text-center mb-6 md:mb-12">
           <div
             className="flex items-center justify-center gap-3 mb-5"
             aria-hidden="true"
@@ -83,7 +83,7 @@ export function Drinks() {
           >
             Något kallt i glaset?
           </h2>
-          <p className="max-w-2xl mx-auto text-[var(--canvas)]/70 text-sm md:text-base leading-[1.6] font-sans">
+          <p className="max-w-3xl lg:max-w-4xl mx-auto text-[var(--canvas)]/70 text-sm md:text-base leading-[1.45] font-sans">
             Baren är hjärtat i huset och här finns verkligen allt. Vi blandar allt
             från svalkande Daiquiris och kaffedrinkar till att servera kalla, lokala
             hantverksöl. För vinälskaren har vi något helt unikt: vi importerar våra
@@ -103,7 +103,7 @@ export function Drinks() {
         >
           {/* Bild */}
           <div className="relative">
-            <div className="relative aspect-square md:aspect-[4/5] w-full max-w-[340px] md:max-w-md mx-auto overflow-hidden rounded-[2px] border border-[var(--canvas)]/10 bg-[var(--ocean-abyss)]">
+            <div className="relative aspect-[4/3] w-full max-w-[min(100%,420px)] md:max-w-xl mx-auto overflow-hidden rounded-[2px] border border-[var(--canvas)]/10 bg-[var(--ocean-abyss)]">
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
                   key={current.slug}
@@ -174,7 +174,7 @@ export function Drinks() {
                   {current.name}
                 </h3>
 
-                <p className="text-[var(--canvas)]/75 text-[15px] md:text-lg leading-[1.65] font-sans font-light max-w-md mx-auto md:mx-0">
+                <p className="text-[var(--canvas)]/75 text-[15px] md:text-base leading-[1.45] font-sans font-light max-w-2xl mx-auto md:mx-0">
                   {current.description}
                 </p>
               </motion.div>
