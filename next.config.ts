@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Omdesignen har två sidor: / och /meny. De gamla adresserna pekar vidare
+  // till motsvarande ankare så indexerade länkar inte går sönder.
+  async redirects() {
+    return [
+      { source: "/boka", destination: "/#boka", permanent: true },
+      { source: "/kontakt", destination: "/#kontakt", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

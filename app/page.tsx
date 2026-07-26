@@ -1,54 +1,41 @@
 import type { Metadata } from "next";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { About } from "@/components/sections/About";
+import { Bar } from "@/components/sections/Bar";
+import { BookingContact } from "@/components/sections/BookingContact";
 import { Hero } from "@/components/sections/Hero";
-import { Heritage } from "@/components/sections/Heritage";
-import { Menu } from "@/components/sections/Menu";
-import { Drinks } from "@/components/sections/Drinks";
-import { Vibe } from "@/components/sections/Vibe";
-import { FindUs } from "@/components/sections/FindUs";
-import { Booking } from "@/components/sections/Booking";
+import { House } from "@/components/sections/House";
+import { MenuPreview } from "@/components/sections/MenuPreview";
 import { getSiteData } from "@/app/_lib/siteData";
 
 export const metadata: Metadata = {
-  title: "Kajmagasinet i Lysekil | Restaurang Lysekil vid kajen",
+  title: "Kajmagasinet — Restaurang och bar vid kajen i Lysekil",
   description:
-    "Kajmagasinet i Lysekil - restaurang med meny, drinkar och bokning direkt vid vattnet. Boka bord hos Kajmagasinet Lysekil idag.",
+    "Restaurang och bar direkt vid vattnet i Lysekil sedan 2010. Se menyn, husets drinkar och de egenimporterade vinerna — och boka bord.",
+  alternates: { canonical: "/" },
 };
 
+/**
+ * Startsidan. Bakgrundsrytmen växlar medvetet mellan bara två teman:
+ * marinblå (hero) → cream (Om oss) → marinblå (Meny) → djup marinblå (Baren)
+ * → foto (Huset) → cream (Boka) → djup marinblå (Footer).
+ */
 export default async function Home() {
-  const {
-    heroHeadline,
-    heroImageAlt,
-    heroImageUrl,
-    openingHours,
-    heritageTiles,
-    menuTiles,
-    vibeTiles,
-    drinksResolved,
-  } = await getSiteData();
+  const { openingHoursOverride, drinks } = await getSiteData();
 
   return (
     <>
-      <Navbar />
+      <SiteHeader />
       <main>
-        <Hero
-          headline={heroHeadline}
-          heroImageUrl={heroImageUrl}
-          heroImageAlt={heroImageAlt}
-        />
-        <Heritage tiles={heritageTiles} />
-        <Menu tiles={menuTiles} />
-        <Drinks
-          drinks={drinksResolved.drinks}
-          sectionTitle={drinksResolved.sectionTitle}
-          sectionIntro={drinksResolved.sectionIntro}
-        />
-        <Vibe tiles={vibeTiles} />
-        <Booking />
-        <FindUs openingHours={openingHours} />
+        <Hero />
+        <About />
+        <MenuPreview />
+        <Bar drinks={drinks} />
+        <House />
+        <BookingContact openingHoursOverride={openingHoursOverride} />
       </main>
-      <Footer openingHours={openingHours} />
+      <SiteFooter />
     </>
   );
 }

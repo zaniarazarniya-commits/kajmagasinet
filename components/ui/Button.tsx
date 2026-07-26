@@ -1,71 +1,55 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { type ButtonHTMLAttributes } from "react";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
+import { Icon, type IconName } from "@/components/ui/Icon";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "outline" | "ghost" | "wood" | "subtle";
-type Size = "sm" | "md" | "lg";
+/**
+ * Knapp i designens tre varianter.
+ *
+ * `icon` är obligatorisk: varje knapp bär en ikon så att den går att tyda utan
+ * att läsa texten. Det är ett uttalat krav från kunden — ta inte bort den.
+ */
+type Variant = "gold" | "ghost" | "ghost-dark";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+const VARIANT_CLASS: Record<Variant, string> = {
+  gold: "btn-gold",
+  ghost: "btn-ghost",
+  "ghost-dark": "btn-ghost-dark",
+};
+
+type CommonProps = {
   variant?: Variant;
-  size?: Size;
-  href?: string;
-}
-
-const base =
-  "inline-flex items-center justify-center gap-2 font-sans transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--brass)] cursor-pointer select-none rounded-[2px]";
-
-const variants: Record<Variant, string> = {
-  primary:
-    "font-semibold uppercase tracking-[0.14em] text-[11px] bg-[var(--canvas)] text-[var(--ocean-deep)] hover:bg-[var(--stone)] border border-[var(--canvas)]",
-  outline:
-    "font-semibold uppercase tracking-[0.14em] text-[11px] border border-[var(--canvas)]/60 text-[var(--canvas)] hover:bg-[var(--canvas)] hover:text-[var(--ocean-deep)] hover:border-[var(--canvas)]",
-  ghost:
-    "font-semibold uppercase tracking-[0.14em] text-[11px] text-[var(--ink-dark)] hover:bg-[var(--parchment)] border border-[var(--ink-dark)]/15",
-  wood:
-    "font-semibold uppercase tracking-[0.14em] text-[11px] bg-[var(--ocean-deep)] text-[var(--canvas)] hover:bg-[var(--ocean-mid)] border border-[var(--ocean-deep)]",
-  subtle:
-    "font-normal normal-case tracking-normal text-sm text-[var(--ocean-deep)] border border-[var(--ocean-deep)]/15 bg-transparent hover:bg-[var(--ocean-deep)]/[0.04] px-6 py-3",
+  icon: IconName;
+  children: React.ReactNode;
+  className?: string;
 };
 
-const sizes: Record<Size, string> = {
-  sm: "px-5 py-2.5 text-[11px]",
-  md: "px-6 py-3 text-[11px]",
-  lg: "px-8 py-4 text-xs",
-};
+type ButtonAsLink = CommonProps &
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children"> & { href: string };
 
-export function Button({
-  variant = "primary",
-  size = "md",
-  className,
-  children,
-  href,
-  ...props
-}: ButtonProps) {
-  const classes = cn(base, variants[variant], sizes[size], className);
+type ButtonAsButton = CommonProps &
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> & { href?: undefined };
 
-  if (href) {
+export function Button(props: ButtonAsLink | ButtonAsButton) {
+  const { variant = "gold", icon, children, className, ...rest } = props;
+  const classes = cn("btn", VARIANT_CLASS[variant], className);
+
+  if (typeof rest.href === "string") {
+    const { href, ...anchorProps } = rest as AnchorHTMLAttributes<HTMLAnchorElement> & {
+      href: string;
+    };
     return (
-      <motion.a
-        href={href}
-        className={classes}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        {children}
-      </motion.a>
+      <a href={href} className={classes} {...anchorProps}>
+        <Icon name={icon} />
+        <span>{children}</span>
+      </a>
     );
   }
 
+  const buttonProps = rest as ButtonHTMLAttributes<HTMLButtonElement>;
   return (
-    <motion.button
-      className={classes}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      {...(props as object)}
-    >
-      {children}
-    </motion.button>
+    <button type={buttonProps.type ?? "button"} className={classes} {...buttonProps}>
+      <Icon name={icon} />
+      <span>{children}</span>
+    </button>
   );
 }

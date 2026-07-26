@@ -4,9 +4,6 @@ import { DRINKS, type DrinkItem } from '@/lib/constants'
 
 import { urlFor } from './image'
 
-const DEFAULT_TITLE = 'Något kallt i glaset?'
-const DEFAULT_INTRO = `Baren är hjärtat i huset och här finns verkligen allt. Vi blandar allt från svalkande Daiquiris och kaffedrinkar till att servera kalla, lokala hantverksöl. För vinälskaren har vi något helt unikt: vi importerar våra egna viner direkt från italienska Vogadori Vini – ett exklusivt urval du bara hittar hos oss.`
-
 type DrinkRow = {
   slug?: string | null
   name?: string | null
@@ -27,25 +24,25 @@ function hasImageAsset(image: unknown): image is SanityImageSource & {
 
 export type ResolvedDrinksSection = {
   drinks: DrinkItem[]
-  sectionTitle: string
-  sectionIntro: string
 }
 
+/**
+ * Drinkar från Sanity, med husets lista som reserv.
+ *
+ * CMS-fälten är enspråkiga. En text som skrivits i Studio används därför för
+ * både svenska och engelska — vill man ha egna översättningar behöver
+ * `drinkRow`-schemat kompletteras med engelska fält.
+ */
 export function resolveDrinksSection(
   doc: {
-    title?: string | null
-    intro?: string | null
     drinks?: DrinkRow[] | null
   } | null,
 ): ResolvedDrinksSection {
-  const sectionTitle = doc?.title?.trim() || DEFAULT_TITLE
-  const sectionIntro = doc?.intro?.trim() || DEFAULT_INTRO
-
-  const fallback = [...DRINKS] as DrinkItem[]
+  const fallback = [...DRINKS]
   const rows = doc?.drinks?.filter(Boolean) ?? []
 
   if (rows.length === 0) {
-    return { drinks: fallback, sectionTitle, sectionIntro }
+    return { drinks: fallback }
   }
 
   const out: DrinkItem[] = []
@@ -53,32 +50,23 @@ export function resolveDrinksSection(
     if (!row) return
     const fb = fallback[i] ?? fallback[fallback.length - 1]
     const name = row.name?.trim() || fb.name
-    const description = row.description?.trim() || fb.description
+    const cmsDescription = row.description?.trim()
     const slug =
-      row.slug?.trim().replace(/\s+/g, '-') ||
-      fb.slug ||
-      `drink-${i + 1}`
+      row.slug?.trim().replace(/\s+/g, '-') || fb.slug || `drink-${i + 1}`
 
-    if (row.image && hasImageAsset(row.image)) {
-      out.push({
-        slug,
-        name,
-        description,
-        image: urlFor(row.image).width(900).height(675).quality(85).url(),
-      })
-    } else {
-      out.push({
-        slug,
-        name,
-        description,
-        image: fb.image,
-      })
-    }
+    out.push({
+      slug,
+      name,
+      taste: fb.taste,
+      description: cmsDescription
+        ? { sv: cmsDescription, en: cmsDescription }
+        : fb.description,
+      image:
+        row.image && hasImageAsset(row.image)
+          ? urlFor(row.image).width(900).height(1200).quality(85).url()
+          : fb.image,
+    })
   })
 
-  return {
-    drinks: out.length > 0 ? out : fallback,
-    sectionTitle,
-    sectionIntro,
-  }
+  return { drinks: out.length > 0 ? out : fallback }
 }

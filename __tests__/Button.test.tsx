@@ -2,38 +2,42 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { Button } from "@/components/ui/Button";
 
-// Mock framer-motion to avoid animation issues in tests
-jest.mock("framer-motion", () => ({
-  motion: {
-    button: ({ children, ...props }: React.PropsWithChildren<object>) => (
-      <button {...props}>{children}</button>
-    ),
-    a: ({ children, ...props }: React.PropsWithChildren<object>) => (
-      <a {...props}>{children}</a>
-    ),
-  },
-}));
-
 describe("Button", () => {
-  it("renders children correctly", () => {
-    render(<Button>Boka bord</Button>);
+  it("renderar barn", () => {
+    render(<Button icon="cal">Boka bord</Button>);
     expect(screen.getByText("Boka bord")).toBeInTheDocument();
   });
 
-  it("renders as anchor when href is provided", () => {
-    render(<Button href="#boka">Boka bord</Button>);
-    const link = screen.getByRole("link", { name: "Boka bord" });
-    expect(link).toHaveAttribute("href", "#boka");
+  it("blir en länk när href anges", () => {
+    render(
+      <Button icon="cal" href="#boka">
+        Boka bord
+      </Button>,
+    );
+    expect(screen.getByRole("link", { name: "Boka bord" })).toHaveAttribute(
+      "href",
+      "#boka",
+    );
   });
 
-  it("renders as button when no href", () => {
-    render(<Button>Klicka här</Button>);
-    expect(screen.getByRole("button", { name: "Klicka här" })).toBeInTheDocument();
+  it("blir en knapp utan href", () => {
+    render(<Button icon="mail">Skicka förfrågan</Button>);
+    expect(
+      screen.getByRole("button", { name: "Skicka förfrågan" }),
+    ).toBeInTheDocument();
   });
 
-  it("applies outline variant class", () => {
-    render(<Button variant="outline">Outline</Button>);
-    const btn = screen.getByRole("button");
-    expect(btn.className).toContain("border-2");
+  it("sätter klass för vald variant", () => {
+    render(
+      <Button icon="glass" variant="ghost">
+        Se vinlistan
+      </Button>,
+    );
+    expect(screen.getByRole("button").className).toContain("btn-ghost");
+  });
+
+  it("bär alltid en ikon — knappen får inte förlita sig på text ensam", () => {
+    const { container } = render(<Button icon="phone">Ring oss</Button>);
+    expect(container.querySelector("button svg")).toBeInTheDocument();
   });
 });

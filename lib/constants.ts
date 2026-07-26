@@ -1,204 +1,170 @@
+import type { Loc } from "@/lib/i18n";
+
 export const SITE = {
   name: "Kajmagasinet",
   tagline: "Restaurang och bar",
   address: "Rosviksgatan 1, 453 30 Lysekil",
+  streetAddress: "Rosviksgatan 1",
+  postalCode: "453 30",
+  city: "Lysekil",
   /** Visningsformat; använd `phoneTel` i tel:-länkar (E.164). */
   phone: "076-716 04 24",
   phoneTel: "+46767160424",
   email: "kajmagasinet@gmail.com",
   instagram: "https://www.instagram.com/kajmagasinet",
-  /** Pin mot rätt läge (samma som Google Maps ”Kajmagasinet” vid Rosviksgatan). */
+  instagramHandle: "@kajmagasinet",
+  geo: { latitude: 58.2730708, longitude: 11.4363266 },
+  /** Inbäddad karta i kontaktsektionen. */
+  mapEmbedUrl:
+    "https://www.google.com/maps?q=Rosviksgatan%201,%20453%2030%20Lysekil&output=embed",
+  /** Vägbeskrivning — gästen ska inte behöva markera adressen själv. */
+  directionsUrl:
+    "https://www.google.com/maps/dir/?api=1&destination=Rosviksgatan+1,+453+30+Lysekil",
   mapsUrl:
     "https://www.google.com/maps/place/Kajmagasinet/@58.2730708,11.4363266,18z",
-  bookingUrl: "/boka",
+  bookingUrl: "/#boka",
 } as const;
 
-export const OPENING_HOURS = [
-  { day: "Måndag – Torsdag", time: "11:00 – 23:00" },
-  { day: "Fredag – Lördag", time: "11:00 – 01:00" },
-  { day: "Söndag", time: "12:00 – 22:00" },
-] as const;
-
-export const MENU_CATEGORIES = [
-  {
-    id: "mat",
-    title: "Köket",
-    description: "Säsong, närodlat och enkel teknik",
-    items: [
-      "Dagens rätt från säsongens lista",
-      "Smörstekt pilgrimsmussla med örter",
-      "Burgare med ost från närbelägen gård",
-      "Förrätt och varmrätt enligt veckomeny",
-    ],
+/**
+ * Bilder. Alla är kundens egna foton.
+ * Heroordningen är medveten: den ljusa vattenbilden måste ligga först,
+ * annars läser hero som en platt marinblå yta.
+ */
+export const IMAGES = {
+  heroSlides: [
+    {
+      src: "/images/miljo/terrass-blaa-timmen.png",
+      alt: {
+        sv: "Trädäcket vid vattnet i blå timmen",
+        en: "The wooden deck by the water at blue hour",
+      },
+    },
+    {
+      src: "/images/miljo/fasad-skylt-skymning.jpeg",
+      alt: {
+        sv: "Kajmagasinets fasad med upplyst skylt i skymningen",
+        en: "The Kajmagasinet facade with its lit sign at dusk",
+      },
+    },
+    {
+      src: "/images/miljo/kajen-solnedgang.jpeg",
+      alt: {
+        sv: "Solnedgång över kajen i Lysekil",
+        en: "Sunset over the quay in Lysekil",
+      },
+    },
+  ],
+  portrait: {
+    src: "/images/team/duo-baren.jpeg",
+    alt: {
+      sv: "Personalen bakom baren på Kajmagasinet",
+      en: "The team behind the bar at Kajmagasinet",
+    },
   },
-  {
-    id: "cocktails",
-    title: "Baren",
-    description: "Klassiska drinkar och hantverksöl",
-    items: [
-      "Gin & tonic med ört och citrus",
-      "Mörk rom, lime och ingefära",
-      "Whisky sour",
-      "Alkoholfritt med bär och ört",
-    ],
+  aboutMini: [
+    {
+      src: "/images/miljo/entre-sommardag.jpeg",
+      alt: { sv: "Kajmagasinets entré en sommardag", en: "The entrance on a summer day" },
+    },
+    {
+      src: "/images/miljo/tradack-skymning.png",
+      alt: { sv: "Trädäcket i skymningen", en: "The deck at dusk" },
+    },
+  ],
+  menuPhoto: {
+    src: "/images/gallery/servering/image%20(7).jpg",
+    alt: {
+      sv: "Bohuslänsk fisksoppa med havskräfta",
+      en: "Bohuslän fish soup with langoustine",
+    },
   },
-  {
-    id: "dryck",
-    title: "Källaren",
-    description: "Öl, vin och mousserande",
-    items: [
-      "Lokala fat och flasköl",
-      "Vinlista med naturvin och klassiker",
-      "Mousserande till maten",
-      "Alkoholfritt utbud",
-    ],
+  winePhoto: {
+    src: "/images/team/bartender-spritz.jpeg",
+    alt: { sv: "Bartender mixar drinkar i baren", en: "Bartender mixing drinks at the bar" },
   },
-] as const;
+  houseSlides: [
+    "/images/team/tomtebloss.jpeg",
+    "/images/miljo/tradack-skymning.png",
+    "/images/miljo/entre-kvall.jpeg",
+  ],
+  ogImage: "/images/brand/og-image.jpg",
+  logo: "/images/brand/icon-512.png",
+} as const;
 
 /** En drink i karusellen (CMS eller fallback nedan). */
 export type DrinkItem = {
   slug: string;
   name: string;
-  description: string;
+  /** Smakprofil — visas som piller. Inte ett löpnummer: gästen ska få veta något. */
+  taste: Loc;
+  description: Loc;
   image: string;
 };
 
 /**
- * Drinkar som visas i karusellen på startsidan.
- * När innehåll finns i Sanity används det i stället; detta är reserv.
+ * Husets drinkar. Bilderna är kontrollerade mot rätt drink — byts en bild ut
+ * måste kopplingen bild/namn verifieras igen, gästen läser bilden först.
+ * Används när inget finns i Sanity.
  */
-/** Standardlista 1–10 (samma ordning som i Sanity ”Drinkar”). Bilder: se public/images/drinks/BILDER-LAS-MIG.md */
 export const DRINKS: DrinkItem[] = [
   {
-    slug: "hallon-timjan-collins",
-    name: "Hallon & Timjan Collins",
-    description:
-      "Ljus rom, hallon, färsk timjan och kolsyrat vatten.",
-    image: "/images/drinks/01-hallon-timjan-collins.png",
+    slug: "mc",
+    name: "MC",
+    taste: { sv: "Sötsur", en: "Sweet & sour" },
+    description: {
+      sv: "Blåbärsvodka, blåbärsliqueur & Red Bull Blåbär.",
+      en: "Blueberry vodka, blueberry liqueur & Red Bull Blue.",
+    },
+    image: "/images/drinks/mc-blabar.jpeg",
   },
   {
-    slug: "blue-lagoon",
-    name: "Blue Lagoon",
-    description: "Vodka, blå curaçao, lime och krossad is.",
-    image: "/images/drinks/07-blue-lagoon.png",
+    slug: "verana-raspberry",
+    name: "Verana Raspberry",
+    taste: { sv: "Söt", en: "Sweet" },
+    description: {
+      sv: "Hallonliqueur & hallonrom — uppfriskande sött.",
+      en: "Raspberry liqueur & raspberry rum — refreshingly sweet.",
+    },
+    image: "/images/drinks/verana-hallon.jpeg",
   },
   {
-    slug: "espresso-martini",
-    name: "Espresso Martini",
-    description:
-      "Vodka, kaffelikör, nybryggd espresso och ett krämigt skum.",
-    image: "/images/drinks/03-espresso-martini.png",
+    slug: "p-p",
+    name: "P-P",
+    taste: { sv: "Sursöt", en: "Sour & sweet" },
+    description: {
+      sv: "Vodka, passionsliqueur & passionssyrup.",
+      en: "Vodka, passionfruit liqueur & passionfruit syrup.",
+    },
+    image: "/images/drinks/pp-passion.jpeg",
   },
   {
-    slug: "moscow-mule",
-    name: "Moscow Mule",
-    description:
-      "Vodka, lime och ingefära, serveras iskall i klassisk kopparmugg.",
-    image: "/images/drinks/10-moscow-mule.png",
+    slug: "dr-love",
+    name: "Dr Love",
+    taste: { sv: "Söt", en: "Sweet" },
+    description: {
+      sv: "Ljus rom & Peachtree — mjuk persikosmak.",
+      en: "Light rum & Peachtree — soft peach.",
+    },
+    image: "/images/drinks/drlove-persika.jpeg",
   },
   {
-    slug: "mango-daiquiri",
-    name: "Mango Daiquiri",
-    description:
-      "Rom, len mangopuré och lime i en intensivt fruktig mix.",
-    image: "/images/drinks/09-mango-daiquiri.png",
+    slug: "weewee",
+    name: "WeeWee",
+    taste: { sv: "Vattenmelon", en: "Watermelon" },
+    description: {
+      sv: "Vodka vattenmelon & vattenmelonliqueur.",
+      en: "Watermelon vodka & watermelon liqueur.",
+    },
+    image: "/images/drinks/weewee-vattenmelon.jpeg",
   },
   {
-    slug: "klassisk-gin-tonic",
-    name: "Klassisk Gin & Tonic",
-    description: "Torr gin, premium tonic, färsk timjan och citronskal.",
-    image: "/images/drinks/02-klassisk-gin-tonic.png",
+    slug: "alkoholfri-drink",
+    name: "Alkoholfri drink",
+    taste: { sv: "69:-", en: "69:-" },
+    description: {
+      sv: "Säg vad du gillar — baren mixar något gott utan alkohol.",
+      en: "Tell us what you like — the bar will mix something good, alcohol free.",
+    },
+    image: "/images/drinks/alkoholfri.jpeg",
   },
-  {
-    slug: "italienskt-rodvin",
-    name: "Italienskt Rödvin",
-    description:
-      "Vårt eget direktimporterade vin från italienska Vogadori Vini.",
-    image: "/images/drinks/04-italienskt-rodvin.png",
-  },
-  {
-    slug: "strawberry-daiquiri",
-    name: "Strawberry Daiquiri",
-    description:
-      "En frostig slushy med färska jordgubbar, lime och ljus rom.",
-    image: "/images/drinks/05-strawberry-daiquiri.png",
-  },
-  {
-    slug: "rom-cola",
-    name: "Rom & Cola",
-    description: "Mörk rom och cola med lime – en avslappnad klassiker.",
-    image: "/images/drinks/06-rom-cola.png",
-  },
-  {
-    slug: "pina-colada",
-    name: "Piña Colada",
-    description:
-      "Ljus rom, kokos, färsk ananas och grädde för en krämig känsla.",
-    image: "/images/drinks/08-pina-colada.png",
-  },
-];
-
-/** Avsnittet "Från middag till häng" — socialt häng efter maten */
-export const AFTER_MEAL = {
-  subtitle:
-    "Kvällen slutar inte när tallrikarna dukas av. Kajmagasinet är byggt för umgänge.",
-  body:
-    "Utmana kompisgänget i en match biljard eller dart, lyssna på livemusik under sommaren eller bara njut av stämningen. Vi har gott om plats för både stora sällskap och spontana besök. Det är helt enkelt ett ställe där det är roligt att vara.",
-} as const;
-
-/** Karusell: endast bilder. `empty` = synlig tom plats (ingen bild än). */
-export type GalleryTile =
-  | { id: string; empty: true }
-  | { id: string; image: string; alt?: string };
-
-export function isGalleryImageTile(
-  tile: GalleryTile,
-): tile is { id: string; image: string; alt?: string } {
-  return "image" in tile && typeof tile.image === "string";
-}
-
-/** Bygger sökväg till fil under public/images/gallery/ (hanterar mellanslag i filnamn). */
-export function galleryImagePath(folder: string, filename: string): string {
-  return `/images/gallery/${folder}/${encodeURIComponent(filename)}`;
-}
-
-const g = galleryImagePath;
-
-export const HERITAGE_GALLERY_TILES: GalleryTile[] = [
-  { id: "heritage-01", image: g("om-oss", "image (1).jpg") },
-  { id: "heritage-02", image: g("om-oss", "image (3) - Copy.jpg") },
-  { id: "heritage-03", image: g("om-oss", "image (3).jpg") },
-  { id: "heritage-04", image: g("om-oss", "image - Copy.jpg") },
-  { id: "heritage-05", image: g("om-oss", "image.jpg") },
-  { id: "heritage-06", image: g("om-oss", "image (6).jpg") },
-  { id: "heritage-07", image: g("om-oss", "image (7) - Copy.jpg") },
-  { id: "heritage-08", image: g("om-oss", "image (8) - Copy.jpg") },
-  { id: "heritage-09", image: g("om-oss", "dsf.jpg") },
-  { id: "heritage-10", image: g("om-oss", "sdad.jpg") },
-];
-
-export const MENU_GALLERY_TILES: GalleryTile[] = [
-  { id: "menu-01", image: g("servering", "image (2).jpg") },
-  { id: "menu-02", image: g("servering", "image (3).jpg") },
-  { id: "menu-03", image: g("servering", "image (4).jpg") },
-  { id: "menu-04", image: g("servering", "image (5).jpg") },
-  { id: "menu-05", image: g("servering", "image (6) - Copy.jpg") },
-  { id: "menu-06", image: g("servering", "image (6).jpg") },
-  { id: "menu-07", image: g("servering", "image (7).jpg") },
-  { id: "menu-08", image: g("servering", "image (8).jpg") },
-  { id: "menu-09", image: g("servering", "image (9).jpg") },
-  { id: "menu-10", image: g("servering", "image.jpg") },
-];
-
-export const VIBE_GALLERY_TILES: GalleryTile[] = [
-  { id: "vibe-01", image: g("huset", "dfs.jpg") },
-  { id: "vibe-02", image: g("huset", "image.jpg") },
-  { id: "vibe-03", image: g("huset", "image (2).jpg") },
-  { id: "vibe-04", image: g("huset", "image (3).jpg") },
-  { id: "vibe-05", image: g("huset", "image (4).jpg") },
-  { id: "vibe-06", image: g("huset", "image (5).jpg") },
-  { id: "vibe-07", image: g("huset", "image (6).jpg") },
-  { id: "vibe-08", image: g("huset", "a.jpg") },
-  { id: "vibe-09", image: g("huset", "aa.jpg") },
-  { id: "vibe-10", image: g("huset", "sdf.jpg") },
 ];

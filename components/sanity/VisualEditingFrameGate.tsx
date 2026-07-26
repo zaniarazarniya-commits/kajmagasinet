@@ -1,7 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { VisualEditing } from "next-sanity/visual-editing";
+
+/** Om vi står i en iframe ändras inte under sidans livstid. */
+function subscribe() {
+  return () => {};
+}
 
 /**
  * Visual Editing should run only inside the Studio preview iframe.
@@ -9,11 +14,11 @@ import { VisualEditing } from "next-sanity/visual-editing";
  * the noisy "Unable to connect to visual editing" runtime error.
  */
 export function VisualEditingFrameGate() {
-  const [isInFrame, setIsInFrame] = useState(false);
-
-  useEffect(() => {
-    setIsInFrame(window.self !== window.top);
-  }, []);
+  const isInFrame = useSyncExternalStore(
+    subscribe,
+    () => window.self !== window.top,
+    () => false,
+  );
 
   if (!isInFrame) return null;
 

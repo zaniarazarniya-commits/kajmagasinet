@@ -1,31 +1,48 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { draftMode } from "next/headers";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Jost, Mulish, Playfair_Display } from "next/font/google";
+import { LanguageProvider } from "@/components/i18n/LanguageProvider";
 import { VisualEditingFrameGate } from "@/components/sanity/VisualEditingFrameGate";
-import { SITE } from "@/lib/constants";
+import { IMAGES, SITE } from "@/lib/constants";
+import { openingHoursSpecification } from "@/lib/hours";
+import { jsonLd } from "@/lib/jsonLd";
 import "./globals.css";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "600", "700"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
+const mulish = Mulish({
+  variable: "--font-mulish",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+/** Närmast originalloggans geometriska sans. */
+const jost = Jost({
+  variable: "--font-jost",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "700"],
+});
+
+const siteUrl = "https://kajmagasinet.se";
+
+const description =
+  "Restaurang och bar direkt vid vattnet i Lysekil sedan 2010. Bohuslänska råvaror, egenimporterade viner och husets drinkar. Boka bord på 076-716 04 24.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://kajmagasinet.se"),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Kajmagasinet i Lysekil | Restaurang Lysekil",
+    default: "Kajmagasinet — Restaurang och bar vid kajen i Lysekil",
     template: "%s | Kajmagasinet i Lysekil",
   },
-  description:
-    "Kajmagasinet i Lysekil är en restaurang och bar vid kajen. Boka bord, se meny och hitta kontaktuppgifter för restaurang i Lysekil.",
+  description,
   keywords: [
     "restaurang lysekil",
     "kajmagasinet lysekil",
@@ -33,58 +50,61 @@ export const metadata: Metadata = {
     "meny lysekil",
     "bar lysekil",
   ],
+  alternates: { canonical: "/" },
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
-    title: "Kajmagasinet i Lysekil | Restaurang Lysekil",
-    description:
-      "Restaurang och bar vid vattnet i Lysekil. Se meny, boka bord och hitta hit till Kajmagasinet i Lysekil.",
-    locale: "sv_SE",
     type: "website",
+    siteName: SITE.name,
+    title: "Kajmagasinet — Restaurang och bar vid kajen i Lysekil",
+    description,
+    locale: "sv_SE",
+    images: [{ url: IMAGES.ogImage, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [IMAGES.ogImage],
   },
 };
 
-const siteUrl = "https://kajmagasinet.se";
+export const viewport: Viewport = {
+  themeColor: "#0c2034",
+};
 
-const organizationJsonLd = {
+const restaurantJsonLd = {
   "@context": "https://schema.org",
   "@type": "Restaurant",
   "@id": `${siteUrl}/#restaurant`,
-  name: "Kajmagasinet i Lysekil",
+  name: SITE.name,
   url: siteUrl,
-  image: `${siteUrl}/images/hero-atmosphere.svg`,
-  description:
-    "Kajmagasinet i Lysekil är en restaurang och bar vid kajen. Boka bord, se meny och hitta hit.",
-  servesCuisine: ["Swedish", "Seafood", "Bistro"],
+  logo: `${siteUrl}${IMAGES.logo}`,
+  image: `${siteUrl}${IMAGES.ogImage}`,
+  description,
+  telephone: SITE.phoneTel,
+  email: SITE.email,
+  servesCuisine: ["Svenskt", "Bohuslänskt", "Skaldjur"],
   priceRange: "$$",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Rosviksgatan 1",
-    postalCode: "453 30",
-    addressLocality: "Lysekil",
+    streetAddress: SITE.streetAddress,
+    postalCode: SITE.postalCode,
+    addressLocality: SITE.city,
     addressCountry: "SE",
   },
-  telephone: SITE.phoneTel,
-  email: SITE.email,
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: SITE.geo.latitude,
+    longitude: SITE.geo.longitude,
+  },
   sameAs: [SITE.instagram],
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday"],
-      opens: "11:00",
-      closes: "23:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Friday", "Saturday"],
-      opens: "11:00",
-      closes: "01:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Sunday",
-      opens: "12:00",
-      closes: "22:00",
-    },
-  ],
+  openingHoursSpecification,
+  acceptsReservations: true,
 };
 
 const webSiteJsonLd = {
@@ -92,7 +112,7 @@ const webSiteJsonLd = {
   "@type": "WebSite",
   "@id": `${siteUrl}/#website`,
   url: siteUrl,
-  name: "Kajmagasinet i Lysekil",
+  name: SITE.name,
   inLanguage: "sv-SE",
 };
 
@@ -104,17 +124,21 @@ export default async function RootLayout({
   const { isEnabled } = await draftMode();
 
   return (
-    <html lang="sv" className={`${inter.variable} ${playfair.variable} h-full`}>
-      <body className="min-h-full flex flex-col antialiased">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
-        {children}
+    <html
+      lang="sv"
+      className={`${playfair.variable} ${mulish.variable} ${jost.variable}`}
+    >
+      <head>
+        {/* Utan JS kör inga IntersectionObservers, och .reveal skulle lämna
+            hela sidan osynlig. */}
+        <noscript>
+          <style>{".reveal{opacity:1;transform:none}"}</style>
+        </noscript>
+      </head>
+      <body>
+        <script type="application/ld+json">{jsonLd(webSiteJsonLd)}</script>
+        <script type="application/ld+json">{jsonLd(restaurantJsonLd)}</script>
+        <LanguageProvider>{children}</LanguageProvider>
         {isEnabled && <VisualEditingFrameGate />}
       </body>
     </html>

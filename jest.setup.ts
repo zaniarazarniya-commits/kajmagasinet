@@ -14,3 +14,41 @@ jest.mock("next/image", () => ({
     });
   },
 }));
+
+// jsdom saknar observers och matchMedia; komponenterna använder alla tre.
+class NoopObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+  takeRecords() {
+    return [];
+  }
+}
+
+Object.defineProperty(window, "IntersectionObserver", {
+  writable: true,
+  value: NoopObserver,
+});
+Object.defineProperty(window, "ResizeObserver", {
+  writable: true,
+  value: NoopObserver,
+});
+Object.defineProperty(window, "matchMedia", {
+  writable: true,
+  value: (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    addListener: () => {},
+    removeListener: () => {},
+    dispatchEvent: () => false,
+  }),
+});
+
+// Används av drinkkarusellen; finns inte i jsdom.
+Object.defineProperty(Element.prototype, "scrollTo", {
+  writable: true,
+  value: () => {},
+});
