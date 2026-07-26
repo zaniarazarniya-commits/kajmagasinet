@@ -1358,6 +1358,75 @@ form.book .btn {
 }
 
 /* ================================================================
+   Infrakust-band — svart remsa längst ned
+   ================================================================ */
+.credit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 24px;
+  background: #000;
+}
+.credit .line {
+  display: block;
+  height: 1px;
+  width: 32px;
+  flex: none;
+  background: #c9a96e;
+  opacity: 0.35;
+  transition: all 0.7s;
+}
+.credit:hover .line {
+  opacity: 0.65;
+  width: 48px;
+}
+.credit .label {
+  font-family: var(--sans);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 243, 0.35);
+  transition: color 0.5s;
+}
+.credit:hover .label {
+  color: rgba(250, 248, 243, 0.5);
+}
+.credit .wordmark {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: rgba(250, 248, 243, 0.55);
+  transition: color 0.5s;
+}
+.credit:hover .wordmark {
+  color: rgba(250, 248, 243, 0.9);
+}
+.credit .arrow {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: #c9a96e;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.5s;
+}
+.credit:hover .arrow {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .credit .line,
+  .credit .label,
+  .credit .wordmark,
+  .credit .arrow {
+    transition: none;
+  }
+}
+
+/* ================================================================
    Menysidan
    ================================================================ */
 .menu-page {

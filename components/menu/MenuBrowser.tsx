@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
+import { InfrakustCredit } from "@/components/layout/InfrakustCredit";
 import { Icon } from "@/components/ui/Icon";
 import { MENU_PAGE, NAV } from "@/lib/content";
 import { SITE } from "@/lib/constants";
@@ -186,14 +187,17 @@ export function MenuBrowser() {
         </div>
       </main>
 
-      <footer className="menu-footer">
-        <div className="wrap foot">
-          <span>
-            {`${SITE.address} · `}
-            <a href={`tel:${SITE.phoneTel}`}>{SITE.phone}</a>
-          </span>
-          <span>{t(MENU_PAGE.footNote)}</span>
+      <footer aria-label="Sidfot">
+        <div className="menu-footer">
+          <div className="wrap foot">
+            <span>
+              {`${SITE.address} · `}
+              <a href={`tel:${SITE.phoneTel}`}>{SITE.phone}</a>
+            </span>
+            <span>{t(MENU_PAGE.footNote)}</span>
+          </div>
         </div>
+        <InfrakustCredit />
       </footer>
     </>
   );
