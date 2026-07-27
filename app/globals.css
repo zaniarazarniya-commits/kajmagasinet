@@ -24,6 +24,11 @@
   --maxw: 1240px;
   --pad: clamp(20px, 5vw, 72px);
   --section-y: clamp(76px, 10vw, 140px);
+
+  /* Mäts upp av useElementHeightVar; värdena här är bara utgångsläge
+     fram till första mätningen. Menysidans sticky-lager staplar på dem. */
+  --header-h: 63px;
+  --catnav-h: 108px;
 }
 
 @theme inline {
@@ -277,6 +282,14 @@ button:focus-visible,
   font-size: 0.86em;
   letter-spacing: 0.055em;
   margin-top: 0.1em;
+}
+
+/* Storleken per kontext — hela lockupen skalar med den. */
+.brand .lock {
+  font-size: 21px;
+}
+.foot-brand .lock {
+  font-size: 26px;
 }
 
 /* ================================================================
@@ -1457,9 +1470,10 @@ form.book .btn {
   font-size: 17px;
 }
 
+/* Ligger direkt under headern, vars höjd varierar med skärmbredd. */
 .catnav {
   position: sticky;
-  top: 63px;
+  top: var(--header-h);
   z-index: 60;
   background: rgba(9, 21, 34, 0.96);
   backdrop-filter: blur(12px);
@@ -1577,9 +1591,10 @@ form.book .btn {
   height: 100%;
   object-fit: cover;
 }
+/* Ankarhopp ska landa under hela sticky-stapeln, inte bakom den. */
 .sec {
   margin-top: 40px;
-  scroll-margin-top: 150px;
+  scroll-margin-top: calc(var(--header-h) + var(--catnav-h) + 16px);
 }
 .sec > h3 {
   font-size: clamp(20px, 2.4vw, 26px);
@@ -1819,9 +1834,6 @@ form.book .btn {
   .plain {
     columns: 1;
   }
-  .catnav {
-    top: 59px;
-  }
 }
 
 @media (max-width: 560px) {
@@ -1832,11 +1844,131 @@ form.book .btn {
     grid-template-columns: 1fr;
   }
   .hero-content {
-    padding-bottom: 130px;
+    padding-bottom: 118px;
   }
   .drink-carousel {
     --drink-per-page: 1;
   }
+  .brand .lock {
+    font-size: 17px;
+  }
+
+  /* Headern måste rymmas på en rad — annars wrappar .nav-cta och headern
+     växer till ~190px, vilket äter en fjärdedel av skärmen och (på
+     menysidan) lägger sig över den sticky kategorinavigeringen.
+     Startsidan har Boka bord både i hero och i draweren, så knappen kan
+     falla bort där. Menysidan saknar drawer och behåller knappen; där får
+     tillbaka-länken vika i stället, logotypen leder ändå hem. */
+  .site-header:not(.static-solid) .nav-book {
+    display: none;
+  }
+  .static-solid .nav-back {
+    display: none;
+  }
+  .static-solid .nav-book {
+    padding: 12px 14px;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+  }
+  .static-solid .nav {
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+  .nav-cta {
+    gap: 10px;
+  }
+
+  /* Infobaren tog tre rader och nästan 100px av hero. */
+  .hero-bar-inner {
+    padding: 12px var(--pad);
+    gap: 8px 16px;
+    font-size: 13px;
+  }
+
+  /* Namnet behöver bredden mer än prisparet gör. */
+  .row .prx {
+    gap: 12px;
+  }
+}
+
+/* Menysidans header bär logotyp, språkväxlare och Boka bord utan drawer att
+   gömma något i. Under ~400px räcker inte bredden till med ordinarie mått,
+   och headern är sticky — varje rad den wrappar äter skärm hela vägen ned. */
+@media (max-width: 400px) {
+  /* Bara menysidan — startsidans header har gott om plats med draweren. */
+  .static-solid .brand .lock {
+    font-size: 15px;
+  }
+  .static-solid .langsw button {
+    padding: 8px 7px;
+  }
+  .static-solid .nav-book {
+    padding: 10px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    gap: 7px;
+  }
+  .static-solid .nav-book svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* ================================================================
+   Träffytor — WCAG 2.2 AA vill ha minst 24 × 24 px
+   Punkterna, footerlänkarna och infobarens länk låg under gränsen.
+   Ytorna växer, det som syns gör det inte.
+   ================================================================ */
+/* Punkterna är 9 px i designen. På smal skärm och på pekskärm växer
+   träffytan runt dem — punkten ser likadan ut, och på stor skärm med mus
+   behålls den täta rytmen från designen. */
+@media (max-width: 920px), (pointer: coarse) {
+  .drink-dots {
+    gap: 0;
+  }
+  .drink-dots button {
+    width: 24px;
+    height: 24px;
+    border-radius: 0;
+    background: none;
+    position: relative;
+    transition: none;
+  }
+  .drink-dots button::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.22);
+    transition: 0.3s;
+  }
+  .drink-dots button.active {
+    width: 40px;
+  }
+  .drink-dots button.active::before {
+    width: 28px;
+    border-radius: 5px;
+    background: var(--gold);
+  }
+}
+
+.foot-col a {
+  margin-bottom: 0;
+  padding-block: 5px;
+}
+.info-row a.val {
+  display: inline-block;
+  padding-block: 4px;
+}
+.hero-bar-inner a.item {
+  padding-block: 4px;
+}
+.guests input {
+  align-self: stretch;
 }
 
 /* ================================================================

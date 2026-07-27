@@ -17,7 +17,7 @@ export function SiteFooter() {
           <div className="foot-grid">
             <div className="foot-brand">
               <div className="fb">
-                <Logo fontSize={26} />
+                <Logo />
               </div>
               <p>{t(FOOTER.blurb)}</p>
             </div>

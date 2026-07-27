@@ -6,14 +6,16 @@
  *   ─────────────
  *   magasinet
  *
- * Allt är satt i `em`, så hela lockupen skalar med `fontSize`.
+ * Allt är satt i `em`, så lockupen skalar med `font-size` på `.lock`.
+ * Storleken sätts i CSS per kontext (header 21px, footer 26px, smal header
+ * mindre) — inte här, annars kan den inte följa brytpunkterna.
  *
  * Obs: detta är en återskapning i CSS + SVG, inte kundens vektorfil —
  * originalet var inbäddat i ett foto. Byt ut när en riktig SVG finns.
  */
-export function Logo({ fontSize }: { fontSize?: number }) {
+export function Logo() {
   return (
-    <span className="lock" style={fontSize ? { fontSize } : undefined}>
+    <span className="lock">
       <span className="lock-top">
         <span className="lock-kaj">kaj</span>
         <svg

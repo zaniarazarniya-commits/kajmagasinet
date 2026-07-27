@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { InfrakustCredit } from "@/components/layout/InfrakustCredit";
 import { Icon } from "@/components/ui/Icon";
+import { useElementHeightVar } from "@/components/ui/useElementHeightVar";
 import { MENU_PAGE, NAV } from "@/lib/content";
 import { SITE } from "@/lib/constants";
 import {
@@ -28,6 +29,7 @@ export function MenuBrowser() {
   const [activeGroup, setActiveGroup] = useState(0);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const catnavRef = useElementHeightVar<HTMLElement>("--catnav-h");
 
   // De negativa marginalerna gör att "aktiv" utlöses när sektionen är i övre
   // delen av viewporten, under den sticky navigeringen — inte när den råkar
@@ -78,7 +80,7 @@ export function MenuBrowser() {
         <p>{t(MENU_PAGE.subtitle)}</p>
       </div>
 
-      <nav className="catnav" aria-label={t(MENU_PAGE.groupNav)}>
+      <nav className="catnav" aria-label={t(MENU_PAGE.groupNav)} ref={catnavRef}>
         <div className="catrow groups">
           {MENU.map((group, i) => (
             <a

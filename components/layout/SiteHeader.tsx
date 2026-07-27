@@ -52,7 +52,7 @@ export function SiteHeader() {
       <header className={cn("site-header", solid && "solid")}>
         <div className="wrap nav">
           <Link href="/#top" className="brand" aria-label={SITE.name}>
-            <Logo fontSize={21} />
+            <Logo />
           </Link>
 
           <nav aria-label="Huvudnavigation">
@@ -74,7 +74,7 @@ export function SiteHeader() {
               {SITE.phone}
             </a>
             <LangSwitch />
-            <Link className="btn btn-gold" href="/#boka">
+            <Link className="btn btn-gold nav-book" href="/#boka">
               <Icon name="cal" />
               <span>{t(NAV.book)}</span>
             </Link>
@@ -100,7 +100,7 @@ export function SiteHeader() {
       >
         <div className="drawer-top">
           <Link href="/#top" className="brand" aria-label={SITE.name}>
-            <Logo fontSize={21} />
+            <Logo />
           </Link>
           <button
             type="button"

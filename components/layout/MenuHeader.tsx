@@ -5,6 +5,7 @@ import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { Icon } from "@/components/ui/Icon";
 import { LangSwitch } from "@/components/ui/LangSwitch";
 import { Logo } from "@/components/ui/Logo";
+import { useElementHeightVar } from "@/components/ui/useElementHeightVar";
 import { NAV } from "@/lib/content";
 import { SITE } from "@/lib/constants";
 
@@ -16,12 +17,13 @@ import { SITE } from "@/lib/constants";
  */
 export function MenuHeader() {
   const { t } = useLanguage();
+  const ref = useElementHeightVar<HTMLElement>("--header-h");
 
   return (
-    <header className="site-header static-solid">
+    <header className="site-header static-solid" ref={ref}>
       <div className="wrap nav">
         <Link href="/" className="brand" aria-label={SITE.name}>
-          <Logo fontSize={21} />
+          <Logo />
         </Link>
 
         <div className="nav-cta">
@@ -30,7 +32,7 @@ export function MenuHeader() {
             <span>{t(NAV.backHome)}</span>
           </Link>
           <LangSwitch />
-          <Link className="btn btn-gold" href="/#boka">
+          <Link className="btn btn-gold nav-book" href="/#boka">
             <Icon name="cal" />
             <span>{t(NAV.book)}</span>
           </Link>
