@@ -1,5 +1,8 @@
 import type { Loc } from "@/lib/i18n";
 
+/** Sajtens adress. kajmagasinet.se omdirigerar hit, så canonical och sitemap ska peka på www. */
+export const SITE_URL = "https://www.kajmagasinet.se";
+
 export const SITE = {
   name: "Kajmagasinet",
   tagline: "Restaurang och bar",

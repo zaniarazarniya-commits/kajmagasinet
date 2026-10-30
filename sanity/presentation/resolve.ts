@@ -2,9 +2,9 @@ import { defineDocuments, defineLocations } from 'sanity/presentation'
 
 export const mainDocuments = defineDocuments([
   { route: '/', filter: `_type == "homePage"` },
-  { route: '/#hitta-oss', filter: `_type == "siteSettings"` },
-  { route: '/#arv', filter: `_type == "pageGalleries"` },
-  { route: '/#drinkar', filter: `_type == "drinksSection"` },
+  { route: '/#kontakt', filter: `_type == "siteSettings"` },
+  { route: '/#om', filter: `_type == "pageGalleries"` },
+  { route: '/#baren', filter: `_type == "drinksSection"` },
 ])
 
 export const locations = {
@@ -25,7 +25,7 @@ export const locations = {
       locations: [
         {
           title: 'Öppettider (Hitta oss)',
-          href: '/#hitta-oss',
+          href: '/#kontakt',
         },
       ],
     }),
@@ -34,9 +34,9 @@ export const locations = {
     select: { title: '_id' },
     resolve: () => ({
       locations: [
-        { title: 'Bildspel: Om oss', href: '/#arv' },
+        { title: 'Bildspel: Om oss', href: '/#om' },
         { title: 'Bildspel: Servering', href: '/#meny' },
-        { title: 'Bildspel: Kväll', href: '/#aktiviteter' },
+        { title: 'Bildspel: Kväll', href: '/#huset' },
       ],
     }),
   }),
@@ -46,7 +46,7 @@ export const locations = {
       locations: [
         {
           title: doc?.title || 'Drinkar (Baren)',
-          href: '/#drinkar',
+          href: '/#baren',
         },
       ],
     }),

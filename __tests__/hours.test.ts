@@ -1,8 +1,9 @@
 import { HOUR_GROUPS, getHourRows, getOpeningStatus, openingHoursSpecification } from "@/lib/hours";
 
-/** Lokal tid — statusen räknas mot gästens klocka. */
+/** Svensk sommartid (+02:00) — statusen räknas mot klockan i Lysekil. */
 function at(year: number, month: number, day: number, hour: number, minute = 0) {
-  return new Date(year, month - 1, day, hour, minute);
+  const p = (n: number) => String(n).padStart(2, "0");
+  return new Date(`${year}-${p(month)}-${p(day)}T${p(hour)}:${p(minute)}:00+02:00`);
 }
 
 describe("getOpeningStatus", () => {
@@ -31,6 +32,42 @@ describe("getOpeningStatus", () => {
     // men gästen sitter kvar på fredagens pass.
     const status = getOpeningStatus(at(2026, 8, 1, 0, 30));
     expect(status.open).toBe(true);
+  });
+
+  it("visar lördagens stängningstid natten mot söndag", () => {
+    // 00:30 natten mot söndag 2026-08-02 — lördagens pass pågår till 01.
+    const status = getOpeningStatus(at(2026, 8, 2, 0, 30));
+    expect(status.open).toBe(true);
+    expect(status.closesLabel).toBe("01");
+  });
+
+  it("visar måndagens öppning efter stängning på söndag", () => {
+    // Söndag 2026-08-02 kl. 22:30 — nästa öppning är måndag 11.
+    const status = getOpeningStatus(at(2026, 8, 2, 22, 30));
+    expect(status.open).toBe(false);
+    expect(status.opensLabel).toBe("11");
+    expect(status.opensTomorrow).toBe(true);
+  });
+
+  it("visar dagens öppning före öppning på söndag", () => {
+    const status = getOpeningStatus(at(2026, 8, 2, 10));
+    expect(status.open).toBe(false);
+    expect(status.opensLabel).toBe("12");
+    expect(status.opensTomorrow).toBe(false);
+  });
+
+  it("räknar efter svensk tid även när gästens telefon går i en annan tidszon", () => {
+    // Onsdag 23:30 i Lysekil är 22:30 i London. Stängt, oavsett gästens klocka.
+    const status = getOpeningStatus(new Date("2026-07-29T22:30:00+01:00"));
+    expect(status.open).toBe(false);
+    expect(status.day).toBe(3);
+  });
+
+  it("räknar vintertid rätt", () => {
+    // Onsdag 2026-12-02 kl. 22:30 svensk vintertid (+01:00) — öppet till 23.
+    const status = getOpeningStatus(new Date("2026-12-02T22:30:00+01:00"));
+    expect(status.open).toBe(true);
+    expect(status.closesLabel).toBe("23");
   });
 
   it("är stängt på småtimmarna en vanlig veckonatt", () => {

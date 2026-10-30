@@ -3,7 +3,7 @@ import { draftMode } from "next/headers";
 import { Jost, Mulish, Playfair_Display } from "next/font/google";
 import { LanguageProvider } from "@/components/i18n/LanguageProvider";
 import { VisualEditingFrameGate } from "@/components/sanity/VisualEditingFrameGate";
-import { IMAGES, SITE } from "@/lib/constants";
+import { IMAGES, SITE, SITE_URL } from "@/lib/constants";
 import { openingHoursSpecification } from "@/lib/hours";
 import { jsonLd } from "@/lib/jsonLd";
 import "./globals.css";
@@ -31,7 +31,7 @@ const jost = Jost({
   weight: ["400", "500", "700"],
 });
 
-const siteUrl = "https://kajmagasinet.se";
+const siteUrl = SITE_URL;
 
 const description =
   "Restaurang och bar direkt vid vattnet i Lysekil sedan 2010. Bohuslänska råvaror, egenimporterade viner och husets drinkar. Boka bord på 076-716 04 24.";

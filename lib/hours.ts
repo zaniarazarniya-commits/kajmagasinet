@@ -73,45 +73,84 @@ function pad(hour: number): string {
 
 export type OpeningStatus = {
   open: boolean;
-  /** Veckodag som statusen gäller, enligt Date.getDay(). */
+  /** Veckodag i Lysekil som statusen gäller, enligt Date.getDay(). */
   day: number;
-  /** Öppningstimme idag, t.ex. "11". */
+  /** Nästa öppningstimme, t.ex. "11" (i morgon om dagens pass är slut). */
   opensLabel: string;
-  /** Stängningstimme idag, normaliserad förbi midnatt, t.ex. "01". */
+  /** True när dagens pass är slut och nästa öppning är i morgon. */
+  opensTomorrow: boolean;
+  /** Stängningstimme för passet som pågår, normaliserad förbi midnatt, t.ex. "01". */
   closesLabel: string;
   /** "11–23" för dagens chip i infobaren. */
   todayLabel: string;
 };
 
+const WEEKDAYS: Record<string, number> = {
+  Sun: 0,
+  Mon: 1,
+  Tue: 2,
+  Wed: 3,
+  Thu: 4,
+  Fri: 5,
+  Sat: 6,
+};
+
+const stockholmClock = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Europe/Stockholm",
+  weekday: "short",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+
+/**
+ * Veckodag och klockslag i Lysekil. Gästens telefon kan gå i en annan
+ * tidszon (turister, seglare), men restaurangen öppnar efter svensk tid.
+ */
+function stockholmNow(now: Date): { day: number; hour: number } {
+  const parts = Object.fromEntries(
+    stockholmClock.formatToParts(now).map((part) => [part.type, part.value]),
+  );
+  return {
+    day: WEEKDAYS[parts.weekday],
+    hour: Number(parts.hour) + Number(parts.minute) / 60,
+  };
+}
+
+function normalise(hour: number): number {
+  return hour > 24 ? hour - 24 : hour;
+}
+
 /**
  * Räknar ut om restaurangen är öppen just nu.
  *
  * Hanterar även småtimmarna: efter midnatt natten mot lördag/söndag har
- * `getDay()` redan rullat över, så gårdagens fönster måste vägas in.
+ * veckodagen redan rullat över, så gårdagens pass måste vägas in. Då gäller
+ * också gårdagens stängningstid.
  */
 export function getOpeningStatus(now: Date = new Date()): OpeningStatus {
-  const day = now.getDay();
-  const hour = now.getHours() + now.getMinutes() / 60;
+  const { day, hour } = stockholmNow(now);
 
   const [opens, closes] = HOURS[day];
-  let open = hour >= opens && hour < closes;
+  const [, closesYesterday] = HOURS[(day + 6) % 7];
+  const [opensTomorrow] = HOURS[(day + 1) % 7];
 
-  if (!open) {
-    const yesterday = (day + 6) % 7;
-    const [, closesYesterday] = HOURS[yesterday];
-    if (closesYesterday > 24 && hour < closesYesterday - 24) {
-      open = true;
-    }
-  }
+  const openFromYesterday = closesYesterday > 24 && hour < closesYesterday - 24;
+  const openToday = hour >= opens && hour < closes;
+  const open = openFromYesterday || openToday;
 
-  const closesNormalised = closes > 24 ? closes - 24 : closes;
+  const closesNow = openFromYesterday ? closesYesterday : closes;
+  // Är dagens pass redan slut öppnar vi nästa gång i morgon.
+  const tomorrow = hour >= closes;
+  const nextOpens = tomorrow ? opensTomorrow : opens;
 
   return {
     open,
     day,
-    opensLabel: pad(opens),
-    closesLabel: pad(closesNormalised),
-    todayLabel: `${pad(opens)}–${pad(closesNormalised)}`,
+    opensLabel: pad(nextOpens),
+    opensTomorrow: tomorrow,
+    closesLabel: pad(normalise(closesNow)),
+    todayLabel: `${pad(opens)}–${pad(normalise(closes))}`,
   };
 }
 

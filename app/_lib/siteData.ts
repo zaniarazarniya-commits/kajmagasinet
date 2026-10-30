@@ -21,7 +21,7 @@ export async function getSiteData() {
   if (isSanityConfigured) {
     try {
       const activeClient = isEnabled ? draftClient : client;
-      const perspective = isEnabled ? "previewDrafts" : "published";
+      const perspective = isEnabled ? "drafts" : "published";
       const [site, drinksDoc] = await Promise.all([
         activeClient.fetch(siteSettingsQuery, {}, { perspective }),
         activeClient.fetch(drinksSectionQuery, {}, { perspective }),
@@ -36,8 +36,9 @@ export async function getSiteData() {
       }
 
       drinksResolved = resolveDrinksSection(drinksDoc);
-    } catch {
-      // Sajten ska fungera även om CMS:et inte svarar.
+    } catch (error) {
+      // Sajten ska fungera även om CMS:et inte svarar, men felet ska synas i loggen.
+      console.error("Kunde inte hämta innehåll från Sanity", error);
     }
   }
 
