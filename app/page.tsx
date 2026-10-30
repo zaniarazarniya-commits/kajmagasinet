@@ -21,6 +21,12 @@ export const metadata: Metadata = {
  * marinblå (hero) → cream (Om oss) → marinblå (Meny) → djup marinblå (Baren)
  * → foto (Huset) → cream (Boka) → djup marinblå (Footer).
  */
+/**
+ * Hämta om innehållet från Sanity högst en gång i minuten. Utan detta byggs
+ * sidan en gång vid deploy, och det personalen publicerar i Studio syns inte.
+ */
+export const revalidate = 60;
+
 export default async function Home() {
   const { openingHoursOverride, drinks } = await getSiteData();
 

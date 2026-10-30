@@ -26,7 +26,7 @@ export function House() {
   }, [reducedMotion]);
 
   return (
-    <section className="huset" aria-labelledby="huset-heading">
+    <section className="huset" id="huset" aria-labelledby="huset-heading">
       <div className="huset-bg" aria-hidden="true">
         {IMAGES.houseSlides.map((src, i) => (
           <div

@@ -82,7 +82,7 @@ export function Hero() {
                 ) : (
                   <>
                     <b>{t(HERO.closedNow)}</b>
-                    {` · ${t(HERO.opens)} ${status.opensLabel}:00`}
+                    {` · ${t(status.opensTomorrow ? HERO.opensTomorrow : HERO.opens)} ${status.opensLabel}:00`}
                   </>
                 )
               ) : null}

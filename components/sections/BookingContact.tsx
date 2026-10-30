@@ -140,10 +140,12 @@ export function BookingContact({
                   max={40}
                   inputMode="numeric"
                   required
-                  value={guests}
+                  // 0 betyder tomt fält, så att gästen kan sudda och skriva t.ex. 6.
+                  value={guests || ""}
                   onChange={(e) =>
-                    setGuests(Math.min(40, Math.max(1, Number(e.target.value) || 1)))
+                    setGuests(Math.min(40, Math.max(0, Number(e.target.value) || 0)))
                   }
+                  onBlur={() => setGuests((g) => Math.max(1, g))}
                 />
                 <button
                   type="button"

@@ -28,6 +28,7 @@ export const HERO = {
   closedNow: { sv: "Stängt just nu", en: "Closed right now" },
   closes: { sv: "stänger", en: "closes" },
   opens: { sv: "öppnar", en: "opens" },
+  opensTomorrow: { sv: "öppnar i morgon", en: "opens tomorrow" },
   today: { sv: "Idag", en: "Today" },
 };
 

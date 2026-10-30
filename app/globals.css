@@ -1565,6 +1565,7 @@ form.book .btn {
 }
 .group {
   margin-top: clamp(46px, 6vw, 78px);
+  scroll-margin-top: calc(var(--header-h) + var(--catnav-h) + 16px);
 }
 .group:first-child {
   margin-top: 0;
@@ -1591,6 +1592,12 @@ form.book .btn {
   height: 100%;
   object-fit: cover;
 }
+/* "Boka bord" ska landa under den fasta headern på startsidan. Rubriken glider
+   upp på plats (Reveal), så marginalen räknar med den rörelsen också. */
+#boka {
+  scroll-margin-top: 130px;
+}
+
 /* Ankarhopp ska landa under hela sticky-stapeln, inte bakom den. */
 .sec {
   margin-top: 40px;
