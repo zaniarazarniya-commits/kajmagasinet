@@ -1371,70 +1371,65 @@ form.book .btn {
 }
 
 /* ================================================================
-   Infrakust-band — svart remsa längst ned
+   Infrakust-band — mörk remsa längst ned, i Infrakusts nya stil
+   (infrakust.se 3 nov 2026): Schibsted Grotesk, vanliga bokstäver,
+   I-märket som ikon, inget guld och inga linjer. Typsnittet ligger i
+   public/fonts (SIL Open Font License, se OFL.txt där).
    ================================================================ */
+@font-face {
+  font-family: "Schibsted Grotesk";
+  src: url("/fonts/schibsted-grotesk.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
 .credit {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
-  padding: 16px 24px;
-  background: #000;
+  min-height: 48px;
+  padding: 12px 24px;
+  background: #15181a;
+  font-family: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1;
+  text-decoration: none;
 }
-.credit .line {
+.credit:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+.credit .credit-mark {
   display: block;
-  height: 1px;
-  width: 32px;
+  width: 20px;
+  height: 20px;
   flex: none;
-  background: #c9a96e;
-  opacity: 0.35;
-  transition: all 0.7s;
-}
-.credit:hover .line {
-  opacity: 0.65;
-  width: 48px;
 }
 .credit .label {
-  font-family: var(--sans);
-  font-size: 9px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(250, 248, 243, 0.35);
-  transition: color 0.5s;
-}
-.credit:hover .label {
-  color: rgba(250, 248, 243, 0.5);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.62);
+  transition: color 0.2s ease;
 }
 .credit .wordmark {
-  font-family: var(--serif);
   font-weight: 700;
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
-  color: rgba(250, 248, 243, 0.55);
-  transition: color 0.5s;
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.2s ease;
+}
+.credit:hover .label {
+  color: rgba(255, 255, 255, 0.85);
 }
 .credit:hover .wordmark {
-  color: rgba(250, 248, 243, 0.9);
-}
-.credit .arrow {
-  font-family: var(--sans);
-  font-size: 11px;
-  color: #c9a96e;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: all 0.5s;
-}
-.credit:hover .arrow {
-  opacity: 1;
-  transform: none;
+  text-decoration-color: rgba(255, 255, 255, 0.6);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .credit .line,
   .credit .label,
-  .credit .wordmark,
-  .credit .arrow {
+  .credit .wordmark {
     transition: none;
   }
 }
